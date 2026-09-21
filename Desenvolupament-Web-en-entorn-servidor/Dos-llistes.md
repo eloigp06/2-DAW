@@ -1,0 +1,1 @@
+Crear una 3a array i comparar les 2 llistes i recorre-les si 2 cançons coincideixen s'afegeix a l'array
