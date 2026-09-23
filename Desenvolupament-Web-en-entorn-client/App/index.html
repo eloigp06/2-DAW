@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Spotify</h1>
+    <section>
+        <h1>Llista de cançons</h1>
+        <table>
+            <thead>
+                <tr><th>Titol</th><th>Durad</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>HO MY GOOD</td><td>90</td></tr>
+                <tr><td>Chicago</td><td>120</td></tr>
+            </tbody>
+        </table>
+    </section>
+    <section id = "SectionBuscar">
+        <h1>Cercador</h1>
+        <form method="post"> Buscar:
+            <label>
+                <input type="text" name="buscar" id="buscar" placeholder="Introdueix canço"/>
+            </label>
+            <button type="button" onclick="alert('Buscar'+document.getElementById('buscar'.value))">
+                buscar
+            </button>
+        </form>
+    </section>
+    
+</body>
+</html>
