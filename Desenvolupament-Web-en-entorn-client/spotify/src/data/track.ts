@@ -1,4 +1,4 @@
-import type { Track } from "../interface/track";
+import type { Track } from "../interfaces/track";
 
 export const tracks: Track[] = [
     {
