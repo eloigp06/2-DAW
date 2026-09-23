@@ -14,22 +14,37 @@ const equips: Equip[] = [
         jugadors: [
             { nom: "Ter Stegen", titular: true },
             { nom: "Pedri", titular: true },
-            { nom: "Ferran Torres", titular: false }
+            { nom: "Rodri", titular: false }
         ]
     },
     {
         nomEquip: "Girona FC",
         jugadors: [
             { nom: "Gazzaniga", titular: true },
-            { nom: "Yangel Herrera", titular: false },
-            { nom: "Tsygankov", titular: true }
+            { nom: "Sergi Puig", titular: false },
+            { nom: "Paulo", titular: true }
         ]
     }
 ];
 
+const nomEquip: string = "Girona FC"
+const jugadorsTitulars: Jugador[] = equipTitular(equips,nomEquip)
 
-function obtenirTitulars(titulars: Equip[], titular: boolean): Equip[] {
-    return titulars.map(
-        (e: Equip) => {}
-    )
+function equipTitular(equips: Equip[], nomEquip: string): Jugador[] {
+    const equipTrobat = equips.find(
+        (e: Equip) =>  { 
+            return e.nomEquip === nomEquip
+        }
+    );
+    
+    if (!equipTrobat) {
+        return [];
+    }
+
+    return equipTrobat.jugadors.filter( 
+        (j: Jugador) => { 
+            return j.titular
+        }
+    );
 }
+console.log(jugadorsTitulars);
