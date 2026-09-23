@@ -31,7 +31,7 @@ const nomEquip: string = "Girona FC"
 const jugadorsTitulars: Jugador[] = equipTitular(equips,nomEquip)
 
 function equipTitular(equips: Equip[], nomEquip: string): Jugador[] {
-    const equipTrobat = equips.find(
+    const equipTrobat:Equip | undefined = equips.find(
         (e: Equip) =>  { 
             return e.nomEquip === nomEquip
         }
