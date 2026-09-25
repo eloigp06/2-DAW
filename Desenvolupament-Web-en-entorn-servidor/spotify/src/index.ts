@@ -1,7 +1,9 @@
 import express, { Express, Request, Response } from "express";
 import { APICONFIG } from "./config/apiConfig";
 import { tracks } from "./data/track/track";
+import { TrackBD } from "./interfaces/track/trackBD";
 import { Track } from "./interfaces/track/track";
+import { isValidTrack } from "./validators/track.validator";
 
 const app: Express = express();
 app.use(express.json());
@@ -17,8 +19,8 @@ app.get("/tracks", (_req: Request, res: Response) => {
 app.get("/tracks/:id", (req: Request, res: Response) => {
   const idTrack: string = req.params.id as string;
 
-  const track: Track[] = tracks.filter(
-    (t: Track) => { return t.id === idTrack }
+  const track: TrackBD[] = tracks.filter(
+    (t: TrackBD) => { return t.id === idTrack }
   );
   if (track.length === 0) {
     return res.status(404).json({ message: `Track ${idTrack} not found` })
@@ -62,7 +64,11 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
  */
 
 app.post("/tracks", (req: Request, res: Response) => {
-  return res.status(201).json(req.body);
+  const track:Track = req.body;
+  if(!isValidTrack(track)){{
+    return res.status(400).json({message: "Invalid data"})
+  }
+  return res.status(201).json(req.body);}
 
 });
 
