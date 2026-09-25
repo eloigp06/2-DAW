@@ -1,12 +1,13 @@
 import { Track } from "../interfaces/track/track";
 
 export function isValidTrack(track: Track): boolean{
+    let correcte: boolean = true;
 
-    if(track.artist == null || track.title == null || track.duration == null){
-        return false;
+    if(!track.artist || !track.title || !track.duration){
+        return false
     }
     if (track.artist.trim().length ===0 || track.title.trim().length===0 || track.duration<=0){
-        return false;
+        correcte =false;
     }
-    return true
+    return correcte
 }
