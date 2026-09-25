@@ -4,6 +4,7 @@ import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
 import { Track } from "./interfaces/track/track";
 import { isValidTrack } from "./validators/track.validator";
+import { randomUUID } from "crypto";
 
 const app: Express = express();
 app.use(express.json());
@@ -68,6 +69,8 @@ app.post("/tracks", (req: Request, res: Response) => {
   if(!isValidTrack(track)){{
     return res.status(400).json({message: "Invalid data"})
   }
+  const.uuid:string = randomUUID();
+  
   return res.status(201).json(req.body);}
 
 });
