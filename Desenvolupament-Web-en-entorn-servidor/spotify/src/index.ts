@@ -65,16 +65,19 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
  */
 
 app.post("/tracks", (req: Request, res: Response) => {
-  const track:Track = req.body;
-  if(!isValidTrack(track)){{
-    return res.status(400).json({message: "Invalid data"})
-  }
-  const.uuid:string = randomUUID();
-  
-  return res.status(201).json(req.body);}
-
+    const track: Track = req.body;
+    if (!isValidTrack(track)) {
+        return res.status(400).json({ message: "Invalid data" })
+    }
+    const uuid: string = randomUUID();
+    const trackRecord: TrackBD = {
+        id: uuid,
+        title: track.title.trim().replace(/\s+/g, " "),
+        artist: track.artist.replace(/\s+/g, " "),
+        duration: track.duration
+    };
+    return res.status(201).json(trackRecord);
 });
-
 app.listen(APICONFIG.port, APICONFIG.host, () => {
   console.log(`Servidor escoltant a http://${APICONFIG.host}:${APICONFIG.port}`);
 })
