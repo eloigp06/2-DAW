@@ -4,25 +4,34 @@ export function createRowSong(track: Track): HTMLTableRowElement {
 
     const titleTd: HTMLTableCellElement = document.createElement("td");
 
-
-
-    const clickTitle: HTMLSpanElement = document.createElement("click");
-    clickTitle.textContent = track.title;
+    const clickTitle: HTMLSpanElement = document.createElement("Span");
+    clickTitle.innerHTML = track.title;
 
     const ListClick: HTMLParagraphElement = document.createElement("p");
-    ListClick.textContent = (`Cançó: ${track.title} - Artista: ${track.artist}`);
+    ListClick.innerHTML = (`Cançó: ${track.title} - Artista: ${track.artist}`);
 
 
-
+    const buttonTancar: HTMLButtonElement = document.createElement('button');
+    buttonTancar.innerHTML = 'x';
+    
+    
     clickTitle.addEventListener("click",
         () => {
             titleTd.appendChild(ListClick);
+            titleTd.appendChild(buttonTancar);
+
+            if (buttonTancar) {
+                buttonTancar.addEventListener("click",
+                    () => {
+                        buttonTancar.hidden = true
+
+                        ListClick.innerHTML = "";
+                    }
+                );
+            }
 
         }
     );
-
-
-
 
 
     const duration: HTMLTableCellElement = document.createElement("td");
