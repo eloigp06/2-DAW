@@ -1,7 +1,7 @@
 import { crearBotoCerca } from "./crearBotoCerca";
 import { crearInputCerca } from "./crearInputCerca";
 
-export function crearCerca(): HTMLFormElement{
+export function crearCerca( cerca:(searchText: string) => void): HTMLFormElement{
     const form: HTMLFormElement = document.createElement("form");
     const label:HTMLLabelElement = document.createElement("label");
     const input: HTMLInputElement = crearInputCerca()
@@ -9,7 +9,12 @@ export function crearCerca(): HTMLFormElement{
         label.textContent = "Buscar"
         label.appendChild(input);
 
-        const botoCerca: HTMLButtonElement = crearBotoCerca();
+        const buscarValorCerca:() => string = () =>
+        {
+            return input.value.trim();
+        }
+        
+        const botoCerca: HTMLButtonElement = crearBotoCerca(buscarValorCerca, cerca);
         form.appendChild(label);
         form.appendChild(botoCerca)
         return form;

@@ -1,11 +1,15 @@
-export function crearBotoCerca(): HTMLButtonElement {
+export function crearBotoCerca(
+    getSearchText: () => string,
+    cerca: (searchText: string) => void
+): HTMLButtonElement {
 
     const botoCerca: HTMLButtonElement = document.createElement("button")
 
     botoCerca.type = "button";
     botoCerca.textContent = "Cerca";
-    botoCerca.addEventListener("click", () => {
-        console.log("boto clicat");
-    });
+    botoCerca.addEventListener("click",
+        () => {
+            cerca(getSearchText());
+        });
     return botoCerca;
 }
