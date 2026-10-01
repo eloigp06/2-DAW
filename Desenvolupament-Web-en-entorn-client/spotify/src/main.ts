@@ -15,7 +15,6 @@ const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const selectCanco: HTMLDivElement = document.createElement("div");
 
 
-
 const selectSong = (track: Track): void => {
     selectCanco.textContent = ""
     const selectText: HTMLParagraphElement = document.createElement("p")
