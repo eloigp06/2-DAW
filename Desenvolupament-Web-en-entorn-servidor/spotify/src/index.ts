@@ -5,6 +5,8 @@ import { TrackBD } from "./interfaces/track/trackBD";
 import { Track } from "./interfaces/track/track";
 import { isValidTrack } from "./validators/track.validator";
 import { randomUUID } from "crypto";
+import { Artist } from "./interfaces/track/artistBD";
+import { artists as importArtists } from "./data/artist/artists";
 
 const app: Express = express();
 app.use(express.json());
@@ -28,6 +30,8 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
   }
   return res.status(200).json(track);
 });
+
+
 
 /** Posibles gets
  * 
@@ -76,7 +80,26 @@ app.post("/tracks", (req: Request, res: Response) => {
         artist: track.artist.replace(/\s+/g, " "),
         duration: track.duration
     };
+    tracks.push(trackRecord);
     return res.status(201).json(trackRecord);
+});
+
+app.get("/artists", (_req: Request, res: Response) => {
+    return res.status(200).json(artists);
+});
+
+const artists: Artist[] = [];
+app.post("/artists", (req: Request, res: Response) => {
+    const artist: Artist = req.body;
+    const isValidCountries: string[] = ["España", "Argentina", "Italia"];
+
+    const paisosValids = isValidCountries.find(countrie => countrie === artist.country )
+    if (!paisosValids) {
+        return res.status(400).json({ message: "Pais no valid" })
+    }
+
+    artists.push(artist);
+    return res.status(201).json(artist);
 });
 app.listen(APICONFIG.port, APICONFIG.host, () => {
   console.log(`Servidor escoltant a http://${APICONFIG.host}:${APICONFIG.port}`);
