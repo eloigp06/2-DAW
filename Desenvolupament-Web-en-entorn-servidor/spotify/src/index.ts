@@ -5,8 +5,11 @@ import { TrackBD } from "./interfaces/track/trackBD";
 import { Track } from "./interfaces/track/track";
 import { isValidTrack } from "./validators/track.validator";
 import { randomUUID } from "crypto";
-import { Artist } from "./interfaces/track/artistBD";
-import { artists as importArtists } from "./data/artist/artists";
+import { Artist } from "./interfaces/artist/artist";
+import { ArtistBD } from "./interfaces/artist/artistBD";
+import { artists } from "./data/artist/artists";
+import { getCanonicalCountry, isValidArtist } from "./validators/artist.validator";
+
 
 const app: Express = express();
 app.use(express.json());
@@ -15,9 +18,13 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
   return res.json(JSON.stringify(APICONFIG));
 });
 
+
+
 app.get("/tracks", (_req: Request, res: Response) => {
   return res.status(200).json(tracks);
 });
+
+
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
   const idTrack: string = req.params.id as string;
@@ -25,6 +32,7 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
   const track: TrackBD[] = tracks.filter(
     (t: TrackBD) => { return t.id === idTrack }
   );
+
   if (track.length === 0) {
     return res.status(404).json({ message: `Track ${idTrack} not found` })
   }
@@ -33,74 +41,104 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
 
 
 
-/** Posibles gets
- * 
- * 
- * saber totes les llistes de reproducció d'un usuari
- * 
- * /usuari/id:/playlist
- * Les últimes cançons que ha escoltat 
- * 
- * /usuari/:id/historial/latest
- * 
- * Les últimes cançons afegides a l'aplicació
- * 
- * /songs/uploaded/latest
- * 
- * Totels les cançons d'una playlist d'un usuari
- * 
- * /users/:id/playlist/idplayList/songs
- * 
- * El meu perfil
- * 
- * /usauris/:id/profile
- * 
- * El perfil d'un altre usuari
- * 
- * /usauris/:id/profile
- * 
- * Música més reproduïda 
- * 
- * /songs/popular
- * 
- * més reproduïda d'un artista
- * 
- * /artist/:id/songs/popular
- */
+app.get("/artists", (_req: Request, res: Response) => {
+  return res.status(200).json(artists);
+});
+
+
+
+app.get("/artists/:id", (req: Request, res: Response) => {
+  const idArtist: string = req.params.id as string;
+  const artist: ArtistBD[] = artists.filter(
+    (a: ArtistBD) => { return a.id === idArtist }
+  );
+  if (artist.length === 0) {
+    return res.status(404).json({ message: `Artist ${idArtist} not found` });
+  }
+  return res.status(200).json(artist[0]);
+});
+
+
 
 app.post("/tracks", (req: Request, res: Response) => {
-    const track: Track = req.body;
-    if (!isValidTrack(track)) {
-        return res.status(400).json({ message: "Invalid data" })
-    }
-    const uuid: string = randomUUID();
-    const trackRecord: TrackBD = {
-        id: uuid,
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.replace(/\s+/g, " "),
-        duration: track.duration
-    };
-    tracks.push(trackRecord);
-    return res.status(201).json(trackRecord);
+  const track: Track = req.body;
+  if (!isValidTrack(track)) {
+    return res.status(400).json({ message: "Invalid data" })
+  }
+  const uuid: string = randomUUID();
+
+  const trackRecord: TrackBD = {
+    id: uuid,
+    title: track.title.trim().replace(/\s+/g, " "),
+    artist: track.artist.replace(/\s+/g, " "),
+    duration: track.duration
+  };
+  tracks.push(trackRecord);
+  return res.status(201).json(trackRecord);
 });
 
-app.get("/artists", (_req: Request, res: Response) => {
-    return res.status(200).json(artists);
+
+
+app.put("/tracks/:id", (req: Request, res: Response) => {
+  const idTrack: string = req.params.id as string;
+  const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+  if (trackIndex === -1) {
+    return res.status(404).json({ message: `Track not found` });
+  }
+
+  const track: Track = req.body;
+  if (!isValidTrack(track)) {
+    return res.status(400).json({ message: "Invalid data" });
+  }
+
+  const updatedTrack: TrackBD = {
+    id: idTrack,
+    title: track.title.trim().replace(/\s+/g, " "),
+    artist: track.artist.trim().replace(/\s+/g, " "),
+    duration: track.duration
+  };
+
+  tracks[trackIndex] = updatedTrack;
+
+  return res.status(204).json(updatedTrack);
 });
 
-const artists: Artist[] = [];
+
+
+app.delete("/tracks/:id", (req: Request, res: Response) => {
+  const idTrack: string = req.params.id as string;
+  const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+  if (trackIndex === -1) {
+    return res.status(404).json({ message: "Track not found" });
+  }
+
+  tracks.splice(trackIndex, 1);
+
+  return res.status(204).json({ message: "Track eliminated" });
+});
+
+
+
 app.post("/artists", (req: Request, res: Response) => {
-    const artist: Artist = req.body;
-    const isValidCountries: string[] = ["España", "Argentina", "Italia"];
+  const artist: Artist = req.body;
 
-    const paisosValids = isValidCountries.find(countrie => countrie === artist.country )
-    if (!paisosValids) {
-        return res.status(400).json({ message: "Pais no valid" })
-    }
+  if (!isValidArtist(artist)) {
+    return res.status(400).json({ message: "Resposta no valida" })
+  }
 
-    artists.push(artist);
-    return res.status(201).json(artist);
+  const idartista: string = randomUUID()
+  const artistkRecord: ArtistBD = {
+    id: idartista,
+    artist: artist.artist.trim().replace(/\s+/g, " "),
+    realName: artist.realName.replace(/\s+/g, " "),
+    pais: getCanonicalCountry(artist.pais)
+  };
+
+  artists.push(artistkRecord);
+  return res.status(201).json(artistkRecord);
 });
+
+
 app.listen(APICONFIG.port, APICONFIG.host, () => {
   console.log(`Servidor escoltant a http://${APICONFIG.host}:${APICONFIG.port}`);
 })
