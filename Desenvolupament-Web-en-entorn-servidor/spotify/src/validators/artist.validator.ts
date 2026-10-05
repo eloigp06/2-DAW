@@ -7,7 +7,7 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
     if(!artist){
         return false;
     }
-    if (!artist.artist || !artist.realName || !artist.pais) {
+    if (!artist.artist || !artist.realName || !artist.country) {
         return false
     }
 
@@ -18,7 +18,7 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
         && longArtist <= MAXARTIST
         && longRealName > 0
         && longRealName <= MAXREALNAME
-        && COUNTRIES.find((p: string) => p.toLowerCase() === artist.pais.trim().replace(/\s+/g, " ").toLowerCase()) !== undefined;
+        && COUNTRIES.find((p: string) => p.toLowerCase() === artist.country.trim().replace(/\s+/g, " ").toLowerCase()) !== undefined;
 }
 
 export function getCanonicalCountry(country: string): string {

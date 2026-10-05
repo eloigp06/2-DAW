@@ -131,7 +131,7 @@ app.post("/artists", (req: Request, res: Response) => {
     id: idartista,
     artist: artist.artist.trim().replace(/\s+/g, " "),
     realName: artist.realName.replace(/\s+/g, " "),
-    pais: getCanonicalCountry(artist.pais)
+    country: getCanonicalCountry(artist.country)
   };
 
   artists.push(artistkRecord);
