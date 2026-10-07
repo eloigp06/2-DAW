@@ -59,7 +59,7 @@ export function deleteTrack(idTrack: string): DeleteService | ErrorService {
   const index: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
 
   if (index === -1) {
-    return { success: false, code: 404, message: " Tack not found " }
+    return { success: false, code: 404, message: " Track not found " }
   }
 
       return { success: true, code: 404, index: index }

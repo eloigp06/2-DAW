@@ -19,6 +19,7 @@ import { ErrorService } from "./interfaces/error/errorSrvice";
 import { SuccessService } from "./data/Services/successService";
 import { UpdateService } from "./data/Services/updateService";
 import { DeleteService } from "./data/Services/deleteService";
+import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "./data/Services/artistService";
 
 
 const app: Express = express();
@@ -86,47 +87,62 @@ app.delete("/tracks/:id", (req: Request, res: Response) => {
 
 
 
-
-
-
-
 app.get("/artists", (_req: Request, res: Response) => {
-  return res.status(200).json(artists);
+  return res.status(200).json(getAllArtist());
 });
-
 
 
 app.get("/artists/:id", (req: Request, res: Response) => {
-  const idArtist: string = req.params.id as string;
-  const artist: ArtistBD[] = artists.filter(
-    (a: ArtistBD) => { return a.id === idArtist }
-  );
-  if (artist.length === 0) {
-    return res.status(404).json({ message: `Artist ${idArtist} not found` });
+  const findsArtist: ArtistBD | undefined = getArtistkById(req.params.id as string)
+  if (!findsArtist) {
+    return res.status(404).json({ message: "Artist not found" });
   }
-  return res.status(200).json(artist[0]);
+  return res.status(200).json(findsArtist);
 });
 
 
-
-
 app.post("/artists", (req: Request, res: Response) => {
-  const artist: Artist = req.body;
+  const result: SuccessService<ArtistBD> | ErrorService = createArtist(req.body);
 
-  if (!isValidArtist(artist)) {
-    return res.status(400).json({ message: "Resposta no valida" })
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
   }
 
-  const idartista: string = randomUUID()
-  const artistkRecord: ArtistBD = {
-    id: idartista,
-    artist: artist.artist.trim().replace(/\s+/g, " "),
-    realName: artist.realName.replace(/\s+/g, " "),
-    country: getCanonicalCountry(artist.country)
-  };
 
-  artists.push(artistkRecord);
-  return res.status(201).json(artistkRecord);
+  artists.push((result as SuccessService<ArtistBD>).data);
+  return res.status(result.code).json(result);
+});
+
+app.put("/artists/:id", (req: Request, res: Response) => {
+
+
+  const result: UpdateService<ArtistBD> | ErrorService = updateArtist(req.body, req.params.id as string);
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
+
+  const index: number = (result as UpdateService<ArtistBD>).index;
+  artists[index] = (result as UpdateService<ArtistBD>).data;
+  return res.status(result.code).json(result);
+});
+
+app.delete("/artists/:id", (req: Request, res: Response) => {
+  const result: DeleteService | ErrorService = deleteArtist(req.params.id as string);
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
+
+  const index: number = (result as DeleteService).index;
+
+  artists.splice(index, 1);
+
+  return res.status(result.code).json(result);
 });
 
 
