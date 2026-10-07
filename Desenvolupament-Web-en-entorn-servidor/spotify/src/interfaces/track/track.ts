@@ -1,5 +1,5 @@
 export interface Track{
     title: string;
-    artist: string;
-    duration: number
+    artist: string; //FK
+    duration: number;
 }

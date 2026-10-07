@@ -14,6 +14,9 @@ import { countryBDD } from "./interfaces/country/countryBDD";
 import { isValidCountry } from "./validators/country.validator";
 import { countryes } from "./data/country/country";
 import { Country } from "./interfaces/country/country";
+import { createTrack, getAllTracks, getTrackById } from "./data/Services/trackService";
+import { ErrorService } from "./interfaces/error/errorSrvice";
+import { SuccessService } from "./data/Services/successService";
 
 
 const app: Express = express();
@@ -24,65 +27,30 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 });
 
 
-
 app.get("/tracks", (_req: Request, res: Response) => {
-  return res.status(200).json(tracks);
+  return res.status(200).json(getAllTracks());
 });
-
-
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
-  const idTrack: string = req.params.id as string;
 
-  const track: TrackBD[] = tracks.filter(
-    (t: TrackBD) => { return t.id === idTrack }
-  );
-
-  if (track.length === 0) {
-    return res.status(404).json({ message: `Track ${idTrack} not found` })
+  const finsdTrack: TrackBD | undefined = getTrackById(req.params.id as string);
+  if (!finsdTrack) {
+    return res.status(404).json({ message: "Track not found" })
   }
-  return res.status(200).json(track);
+  return res.status(200).json(finsdTrack);
 });
-
-
-
-app.get("/artists", (_req: Request, res: Response) => {
-  return res.status(200).json(artists);
-});
-
-
-
-app.get("/artists/:id", (req: Request, res: Response) => {
-  const idArtist: string = req.params.id as string;
-  const artist: ArtistBD[] = artists.filter(
-    (a: ArtistBD) => { return a.id === idArtist }
-  );
-  if (artist.length === 0) {
-    return res.status(404).json({ message: `Artist ${idArtist} not found` });
-  }
-  return res.status(200).json(artist[0]);
-});
-
-
 
 app.post("/tracks", (req: Request, res: Response) => {
-  const track: Track = req.body;
-  if (!isValidTrack(track)) {
-    return res.status(400).json({ message: "Invalid data" })
+
+  const result: SuccessService<TrackBD> | ErrorService  = createTrack(req.body);
+
+  if(!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message})
   }
-  const uuid: string = randomUUID();
-
-  const trackRecord: TrackBD = {
-    id: uuid,
-    title: track.title.trim().replace(/\s+/g, " "),
-    artist: track.artist.replace(/\s+/g, " "),
-    duration: track.duration
-  };
-  tracks.push(trackRecord);
-  return res.status(201).json(trackRecord);
+  tracks.push((result as SuccessService<TrackBD>).data);
+  return res.status(result.code).json(result);
 });
-
-
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
   const idTrack: string = req.params.id as string;
@@ -107,6 +75,28 @@ app.put("/tracks/:id", (req: Request, res: Response) => {
 
   return res.status(204).json(updatedTrack);
 });
+
+app.get("/artists", (_req: Request, res: Response) => {
+  return res.status(200).json(artists);
+});
+
+
+
+app.get("/artists/:id", (req: Request, res: Response) => {
+  const idArtist: string = req.params.id as string;
+  const artist: ArtistBD[] = artists.filter(
+    (a: ArtistBD) => { return a.id === idArtist }
+  );
+  if (artist.length === 0) {
+    return res.status(404).json({ message: `Artist ${idArtist} not found` });
+  }
+  return res.status(200).json(artist[0]);
+});
+
+
+
+
+
 
 
 
@@ -148,7 +138,6 @@ app.post("/artists", (req: Request, res: Response) => {
 app.get("/countryes", (_req: Request, res: Response) => {
   return res.status(200).json(countryes);
 });
-
 
 app.post("/countryes", (req: Request, res: Response) => {
   const country: Country = req.body;
