@@ -1,7 +1,7 @@
 import { ArtistBD } from "../artist/artistBD"
 
 export interface albumBDD{
-    Id: string; //PK
+    id: string; //PK
     artist: ArtistBD;
     data: string;
 }

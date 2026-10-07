@@ -1,7 +1,7 @@
 import { userBDD } from "../User/userBDD"
 
 export interface playListBDD{
-    Id: string; //PK
+    id: string; //PK
     user: userBDD; //FK
     title: string;
 }

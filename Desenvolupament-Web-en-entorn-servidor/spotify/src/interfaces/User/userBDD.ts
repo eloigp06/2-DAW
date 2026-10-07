@@ -1,7 +1,7 @@
-import { countryBDD } from "../Country/countryBDD"
+import { countryBDD } from "../country/countryBDD"
 
 export interface userBDD{
-    Id: string; //PK
+    id: string; //PK
     countryBDD: countryBDD; //FK
     email: string;
 }

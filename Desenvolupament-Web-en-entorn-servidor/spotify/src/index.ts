@@ -9,6 +9,11 @@ import { Artist } from "./interfaces/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { artists } from "./data/artist/artists";
 import { getCanonicalCountry, isValidArtist } from "./validators/artist.validator";
+import { COUNTRIES } from "./interfaces/artist/artist.constant";
+import { countryBDD } from "./interfaces/country/countryBDD";
+import { isValidCountry } from "./validators/country.validator";
+import { countryes } from "./data/country/country";
+import { Country } from "./interfaces/country/country";
 
 
 const app: Express = express();
@@ -138,6 +143,51 @@ app.post("/artists", (req: Request, res: Response) => {
   return res.status(201).json(artistkRecord);
 });
 
+
+
+app.get("/countryes", (_req: Request, res: Response) => {
+  return res.status(200).json(countryes);
+});
+
+
+app.post("/countryes", (req: Request, res: Response) => {
+  const country: Country = req.body;
+
+  if (!isValidCountry(country)) {
+    return res.status(400).json({ message: "Resposta no valida" })
+  }
+
+  const idCountry: string = randomUUID()
+  const CountryRecord: countryBDD = {
+    id: idCountry,
+    name: country.name.replace(/\s+/g, " ")
+  };
+
+  countryes.push(CountryRecord);
+  return res.status(201).json(CountryRecord);
+});
+
+app.put("/countryes/:id", (req: Request, res: Response) => {
+  // const idCountry: string = req.params.id as string;
+  // const countryIndex: number = tracks.findIndex((country: countryBDD) => country.name === idCountry);
+  // if (countryIndex === -1) {
+  //   return res.status(404).json({ message: `Track not found` });
+  // }
+
+  // const country: Country = req.body;
+  // if (!isValidTrack(country)) {
+  //   return res.status(400).json({ message: "Invalid data" });
+  // }
+
+  // const updateCountry: countryBDD = {
+  //   id: idCountry,
+  //   name: country.name.replace(/\s+/g, " ")
+  // };
+
+  // countryes[countryIndex] = updateCountry;
+
+  // return res.status(204).json(updateCountry);
+});
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
   console.log(`Servidor escoltant a http://${APICONFIG.host}:${APICONFIG.port}`);

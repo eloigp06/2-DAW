@@ -1,4 +1,4 @@
 export interface countryBDD{
-    Id: string //PK
+    id: string //PK
     name: string
 }
