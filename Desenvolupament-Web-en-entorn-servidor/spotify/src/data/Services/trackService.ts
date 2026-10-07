@@ -6,6 +6,7 @@ import { tracks } from "../track/track";
 import { ErrorService } from "../../interfaces/error/errorSrvice";
 import { SuccessService } from "./successService";
 import { UpdateService } from "./updateService";
+import { DeleteService } from "./deleteService";
 
 export function getAllTracks(): TrackBD[] {
     return tracks
@@ -34,9 +35,9 @@ export function createTrack(track: Track): SuccessService<TrackBD> | ErrorServic
 }
 
 export function updateTrack(track: Track, idTrack: string): UpdateService<TrackBD> | ErrorService {
-    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+    const index: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
 
-    if (trackIndex === -1) {
+    if (index === -1) {
         return { success: false, code: 404, message: "Track not found" };
     }
 
@@ -51,5 +52,16 @@ export function updateTrack(track: Track, idTrack: string): UpdateService<TrackB
         duration: track.duration
     };
 
-    return { success: false, code: 204, data: updatedTrack }
+    return { success: true, code: 200, index: index, data: updatedTrack }
+}
+
+export function deleteTrack(idTrack: string): DeleteService | ErrorService {
+  const index: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+
+  if (index === -1) {
+    return { success: false, code: 404, message: " Tack not found " }
+  }
+
+      return { success: true, code: 404, index: index }
+
 }

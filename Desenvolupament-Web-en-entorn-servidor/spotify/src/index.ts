@@ -14,10 +14,11 @@ import { countryBDD } from "./interfaces/country/countryBDD";
 import { isValidCountry } from "./validators/country.validator";
 import { countryes } from "./data/country/country";
 import { Country } from "./interfaces/country/country";
-import { createTrack, getAllTracks, getTrackById, updateTrack } from "./data/Services/trackService";
+import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "./data/Services/trackService";
 import { ErrorService } from "./interfaces/error/errorSrvice";
 import { SuccessService } from "./data/Services/successService";
 import { UpdateService } from "./data/Services/updateService";
+import { DeleteService } from "./data/Services/deleteService";
 
 
 const app: Express = express();
@@ -55,22 +56,39 @@ app.post("/tracks", (req: Request, res: Response) => {
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
 
-  const trackIndex: UpdateService<TrackBD> | ErrorService = updateTrack(req.body, req.params.id as string);
-  const result: UpdateService<TrackBD> | ErrorService = createTrack(req.body);
 
-  if (!trackIndex ) {
-    return res.status(result.code).json(result);
-  }
-
+  const result: UpdateService<TrackBD> | ErrorService = updateTrack(req.body, req.params.id as string);
 
   if (!result.success) {
     const errorResult = result as ErrorService;
     return res.status(result.code).json({ message: errorResult.message })
   }
 
+  const index: number = (result as UpdateService<TrackBD>).index;
+  tracks[index] = (result as UpdateService<TrackBD>).data;
+  return res.status(result.code).json(result);
+});
+
+app.delete("/tracks/:id", (req: Request, res: Response) => {
+  const result: DeleteService | ErrorService = deleteTrack(req.params.id as string);
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
+
+  const index: number = (result as DeleteService).index;
+
+  tracks.splice(index, 1);
 
   return res.status(result.code).json(result);
 });
+
+
+
+
+
+
 
 app.get("/artists", (_req: Request, res: Response) => {
   return res.status(200).json(artists);
@@ -89,24 +107,6 @@ app.get("/artists/:id", (req: Request, res: Response) => {
   return res.status(200).json(artist[0]);
 });
 
-
-
-
-
-
-
-
-app.delete("/tracks/:id", (req: Request, res: Response) => {
-  const idTrack: string = req.params.id as string;
-  const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
-  if (trackIndex === -1) {
-    return res.status(404).json({ message: "Track not found" });
-  }
-
-  tracks.splice(trackIndex, 1);
-
-  return res.status(204).json({ message: "Track eliminated" });
-});
 
 
 

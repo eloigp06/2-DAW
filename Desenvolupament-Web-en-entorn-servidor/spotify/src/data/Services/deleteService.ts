@@ -1,7 +1,5 @@
-export interface UpdateService<T> {
+export interface DeleteService {
     success: boolean;
     code: number;
     index: number;
-    data: T;
-
 }
