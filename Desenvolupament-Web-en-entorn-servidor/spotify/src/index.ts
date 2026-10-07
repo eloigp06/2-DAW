@@ -14,9 +14,10 @@ import { countryBDD } from "./interfaces/country/countryBDD";
 import { isValidCountry } from "./validators/country.validator";
 import { countryes } from "./data/country/country";
 import { Country } from "./interfaces/country/country";
-import { createTrack, getAllTracks, getTrackById } from "./data/Services/trackService";
+import { createTrack, getAllTracks, getTrackById, updateTrack } from "./data/Services/trackService";
 import { ErrorService } from "./interfaces/error/errorSrvice";
 import { SuccessService } from "./data/Services/successService";
+import { UpdateService } from "./data/Services/updateService";
 
 
 const app: Express = express();
@@ -42,38 +43,33 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
 
 app.post("/tracks", (req: Request, res: Response) => {
 
-  const result: SuccessService<TrackBD> | ErrorService  = createTrack(req.body);
+  const result: SuccessService<TrackBD> | ErrorService = createTrack(req.body);
 
-  if(!result.success) {
+  if (!result.success) {
     const errorResult = result as ErrorService;
-    return res.status(result.code).json({ message: errorResult.message})
+    return res.status(result.code).json({ message: errorResult.message })
   }
   tracks.push((result as SuccessService<TrackBD>).data);
   return res.status(result.code).json(result);
 });
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
-  const idTrack: string = req.params.id as string;
-  const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
-  if (trackIndex === -1) {
-    return res.status(404).json({ message: `Track not found` });
+
+  const trackIndex: UpdateService<TrackBD> | ErrorService = updateTrack(req.body, req.params.id as string);
+  const result: UpdateService<TrackBD> | ErrorService = createTrack(req.body);
+
+  if (!trackIndex ) {
+    return res.status(result.code).json(result);
   }
 
-  const track: Track = req.body;
-  if (!isValidTrack(track)) {
-    return res.status(400).json({ message: "Invalid data" });
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
   }
 
-  const updatedTrack: TrackBD = {
-    id: idTrack,
-    title: track.title.trim().replace(/\s+/g, " "),
-    artist: track.artist.trim().replace(/\s+/g, " "),
-    duration: track.duration
-  };
 
-  tracks[trackIndex] = updatedTrack;
-
-  return res.status(204).json(updatedTrack);
+  return res.status(result.code).json(result);
 });
 
 app.get("/artists", (_req: Request, res: Response) => {

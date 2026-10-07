@@ -5,6 +5,7 @@ import { isValidTrack } from "../../validators/track.validator";
 import { tracks } from "../track/track";
 import { ErrorService } from "../../interfaces/error/errorSrvice";
 import { SuccessService } from "./successService";
+import { UpdateService } from "./updateService";
 
 export function getAllTracks(): TrackBD[] {
     return tracks
@@ -17,9 +18,9 @@ export function getTrackById(idTrack: string): TrackBD | undefined {
 export function createTrack(track: Track): SuccessService<TrackBD> | ErrorService {
 
     if (!isValidTrack(track)) {
-        return {success: false, code: 400, message: "Invalid data"};
+        return { success: false, code: 400, message: "Invalid data" };
     }
-    
+
     const uuid: string = randomUUID();
 
     const trackRecord: TrackBD = {
@@ -28,6 +29,27 @@ export function createTrack(track: Track): SuccessService<TrackBD> | ErrorServic
         artist: track.artist.replace(/\s+/g, " "),
         duration: track.duration
     };
-    
-    return {success: true, code: 201, data: trackRecord};
+
+    return { success: true, code: 201, data: trackRecord };
+}
+
+export function updateTrack(track: Track, idTrack: string): UpdateService<TrackBD> | ErrorService {
+    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+
+    if (trackIndex === -1) {
+        return { success: false, code: 404, message: "Track not found" };
+    }
+
+    if (!isValidTrack(track)) {
+        return { success: false, code: 400, message: "Invalid data" };
+    }
+
+    const updatedTrack: TrackBD = {
+        id: idTrack,
+        title: track.title.trim().replace(/\s+/g, " "),
+        artist: track.artist.trim().replace(/\s+/g, " "),
+        duration: track.duration
+    };
+
+    return { success: false, code: 204, data: updatedTrack }
 }
