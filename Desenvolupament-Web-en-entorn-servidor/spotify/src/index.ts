@@ -2,25 +2,17 @@ import express, { Express, Request, Response } from "express";
 import { APICONFIG } from "./config/apiConfig";
 import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
-import { Track } from "./interfaces/track/track";
-import { isValidTrack } from "./validators/track.validator";
-import { randomUUID } from "crypto";
-import { Artist } from "./interfaces/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { artists } from "./data/artist/artists";
-import { getCanonicalCountry, isValidArtist } from "./validators/artist.validator";
-import { COUNTRIES } from "./interfaces/artist/artist.constant";
 import { countryBD } from "./interfaces/country/countryBD";
-import { isValidCountry } from "./validators/country.validator";
 import { countryes } from "./data/country/country";
-import { Country } from "./interfaces/country/country";
 import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "./data/Services/trackService";
 import { ErrorService } from "./interfaces/error/errorSrvice";
 import { SuccessService } from "./data/Services/successService";
 import { UpdateService } from "./data/Services/updateService";
 import { DeleteService } from "./data/Services/deleteService";
 import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "./data/Services/artistService";
-import { createCountrye, deleteCountry } from "./data/Services/countryService";
+import { createCountrye, getAllCountryes, updateCountry } from "./data/Services/countryService";
 
 
 const app: Express = express();
@@ -145,9 +137,8 @@ app.delete("/artists/:id", (req: Request, res: Response) => {
 
 
 
-
 app.get("/countryes", (_req: Request, res: Response) => {
-  return res.status(200).json(countryes);
+  return res.status(200).json(getAllCountryes());
 });
 
 app.post("/countryes", (req: Request, res: Response) => {
@@ -165,7 +156,62 @@ app.post("/countryes", (req: Request, res: Response) => {
 
 app.put("/countryes/:id", (req: Request, res: Response) => {
 
-  const result: DeleteService | ErrorService = deleteCountry(req.params.id as string);
+  const result: UpdateService<countryBD> | ErrorService = updateCountry(req.body, req.params.id as string);
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
+
+  const index: number = (result as UpdateService<countryBD>).index;
+  countryes[index] = (result as UpdateService<countryBD>).data;
+  return res.status(result.code).json(result);
+});
+
+
+
+app.get("/users", (_req: Request, res: Response) => {
+  return res.status(200).json(getAllArtist());
+});
+
+app.get("/users/:id", (req: Request, res: Response) => {
+  const findsArtist: ArtistBD | undefined = getArtistkById(req.params.id as string)
+  if (!findsArtist) {
+    return res.status(404).json({ message: "Artist not found" });
+  }
+  return res.status(200).json(findsArtist);
+});
+
+app.post("/users", (req: Request, res: Response) => {
+  const result: SuccessService<ArtistBD> | ErrorService = createArtist(req.body);
+
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
+
+
+  artists.push((result as SuccessService<ArtistBD>).data);
+  return res.status(result.code).json(result);
+});
+
+app.put("/users/:id", (req: Request, res: Response) => {
+
+  const result: UpdateService<ArtistBD> | ErrorService = updateArtist(req.body, req.params.id as string);
+
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
+
+  const index: number = (result as UpdateService<ArtistBD>).index;
+  artists[index] = (result as UpdateService<ArtistBD>).data;
+  return res.status(result.code).json(result);
+});
+
+app.delete("/users/:id", (req: Request, res: Response) => {
+  const result: DeleteService | ErrorService = deleteArtist(req.params.id as string);
 
   if (!result.success) {
     const errorResult = result as ErrorService;
@@ -174,13 +220,10 @@ app.put("/countryes/:id", (req: Request, res: Response) => {
 
   const index: number = (result as DeleteService).index;
 
-  countryes.splice(index, 1);
+  artists.splice(index, 1);
 
   return res.status(result.code).json(result);
 });
-
-
-
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
   console.log(`Servidor escoltant a http://${APICONFIG.host}:${APICONFIG.port}`);

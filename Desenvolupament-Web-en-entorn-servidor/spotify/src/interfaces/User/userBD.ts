@@ -1,7 +1,5 @@
-import { countryBD } from "../country/countryBD"
-
-export interface userBD{
+import { User } from "./user";
+export interface UserBD extends User{
     id: string; //PK
-    countryBD: countryBD; //FK
-    email: string;
+
 }

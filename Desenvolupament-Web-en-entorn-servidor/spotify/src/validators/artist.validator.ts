@@ -1,6 +1,7 @@
 
 import { Artist } from "../interfaces/artist/artist";
-import { COUNTRIES, MAXARTIST, MAXREALNAME } from "../interfaces/artist/artist.constant";
+import { MAXARTIST, MAXREALNAME } from "../interfaces/artist/artist.constant";
+import { COUNTRIES } from "../interfaces/country/country.constant";
 
 export function isValidArtist(artist: Artist): boolean | string | undefined {
 

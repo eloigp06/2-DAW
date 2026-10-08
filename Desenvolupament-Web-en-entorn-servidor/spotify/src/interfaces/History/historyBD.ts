@@ -1,9 +1,9 @@
 import { TrackBD } from "../track/trackBD"
-import { userBD } from "../User/userBD"
+import { UserBD } from "../User/userBD"
 
 export interface historyBD {
     id: string; //PK
-    user: userBD; //FK
+    user: UserBD; //FK
     track: TrackBD; //FK
     data: string;
 }

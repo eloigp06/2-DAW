@@ -1,7 +1,7 @@
-import { userBD } from "../User/userBD"
+import { UserBD } from "../User/userBD"
 
 export interface playListBD{
     id: string; //PK
-    user: userBD; //FK
+    user: UserBD; //FK
     title: string;
 }
