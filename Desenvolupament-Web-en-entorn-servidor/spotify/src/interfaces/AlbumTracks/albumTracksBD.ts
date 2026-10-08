@@ -1,7 +1,7 @@
 import { TrackBD } from "../track/trackBD";
 
-export interface albumTracksBDD{
+export interface albumTracksBD{
     id: string; //PK
-    album: albumTracksBDD; //FK
+    album: albumTracksBD; //FK
     track: TrackBD; //FK
 }

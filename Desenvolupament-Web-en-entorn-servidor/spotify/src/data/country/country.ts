@@ -1,6 +1,6 @@
-import { countryBDD } from "../../interfaces/country/countryBDD";
+import { countryBD } from "../../interfaces/country/countryBD";
 
-export const countryes: countryBDD[] = [
+export const countryes: countryBD[] = [
     {
         "id": "fca00280-7d42-47b0-beee-7983337ba93c",
         "name": "Spain"

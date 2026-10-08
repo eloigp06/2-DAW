@@ -10,7 +10,7 @@ import { ArtistBD } from "./interfaces/artist/artistBD";
 import { artists } from "./data/artist/artists";
 import { getCanonicalCountry, isValidArtist } from "./validators/artist.validator";
 import { COUNTRIES } from "./interfaces/artist/artist.constant";
-import { countryBDD } from "./interfaces/country/countryBDD";
+import { countryBD } from "./interfaces/country/countryBD";
 import { isValidCountry } from "./validators/country.validator";
 import { countryes } from "./data/country/country";
 import { Country } from "./interfaces/country/country";
@@ -20,6 +20,7 @@ import { SuccessService } from "./data/Services/successService";
 import { UpdateService } from "./data/Services/updateService";
 import { DeleteService } from "./data/Services/deleteService";
 import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "./data/Services/artistService";
+import { createCountrye, deleteCountry } from "./data/Services/countryService";
 
 
 const app: Express = express();
@@ -91,7 +92,6 @@ app.get("/artists", (_req: Request, res: Response) => {
   return res.status(200).json(getAllArtist());
 });
 
-
 app.get("/artists/:id", (req: Request, res: Response) => {
   const findsArtist: ArtistBD | undefined = getArtistkById(req.params.id as string)
   if (!findsArtist) {
@@ -99,7 +99,6 @@ app.get("/artists/:id", (req: Request, res: Response) => {
   }
   return res.status(200).json(findsArtist);
 });
-
 
 app.post("/artists", (req: Request, res: Response) => {
   const result: SuccessService<ArtistBD> | ErrorService = createArtist(req.body);
@@ -116,7 +115,6 @@ app.post("/artists", (req: Request, res: Response) => {
 });
 
 app.put("/artists/:id", (req: Request, res: Response) => {
-
 
   const result: UpdateService<ArtistBD> | ErrorService = updateArtist(req.body, req.params.id as string);
 
@@ -147,48 +145,42 @@ app.delete("/artists/:id", (req: Request, res: Response) => {
 
 
 
+
 app.get("/countryes", (_req: Request, res: Response) => {
   return res.status(200).json(countryes);
 });
 
 app.post("/countryes", (req: Request, res: Response) => {
-  const country: Country = req.body;
+  const result: SuccessService<countryBD> | ErrorService = createCountrye(req.body);
 
-  if (!isValidCountry(country)) {
-    return res.status(400).json({ message: "Resposta no valida" })
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
   }
 
-  const idCountry: string = randomUUID()
-  const CountryRecord: countryBDD = {
-    id: idCountry,
-    name: country.name.replace(/\s+/g, " ")
-  };
 
-  countryes.push(CountryRecord);
-  return res.status(201).json(CountryRecord);
+  countryes.push((result as SuccessService<countryBD>).data);
+  return res.status(result.code).json(result);
 });
 
 app.put("/countryes/:id", (req: Request, res: Response) => {
-  // const idCountry: string = req.params.id as string;
-  // const countryIndex: number = tracks.findIndex((country: countryBDD) => country.name === idCountry);
-  // if (countryIndex === -1) {
-  //   return res.status(404).json({ message: `Track not found` });
-  // }
 
-  // const country: Country = req.body;
-  // if (!isValidTrack(country)) {
-  //   return res.status(400).json({ message: "Invalid data" });
-  // }
+  const result: DeleteService | ErrorService = deleteCountry(req.params.id as string);
 
-  // const updateCountry: countryBDD = {
-  //   id: idCountry,
-  //   name: country.name.replace(/\s+/g, " ")
-  // };
+  if (!result.success) {
+    const errorResult = result as ErrorService;
+    return res.status(result.code).json({ message: errorResult.message })
+  }
 
-  // countryes[countryIndex] = updateCountry;
+  const index: number = (result as DeleteService).index;
 
-  // return res.status(204).json(updateCountry);
+  countryes.splice(index, 1);
+
+  return res.status(result.code).json(result);
 });
+
+
+
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
   console.log(`Servidor escoltant a http://${APICONFIG.host}:${APICONFIG.port}`);
