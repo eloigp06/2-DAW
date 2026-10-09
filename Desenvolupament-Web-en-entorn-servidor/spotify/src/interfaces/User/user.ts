@@ -1,6 +1,6 @@
 import { countryBD } from "../country/countryBD";
 
 export interface User{
-    country: countryBD; //FK
+    country: string; //FK
     email: string;
 }

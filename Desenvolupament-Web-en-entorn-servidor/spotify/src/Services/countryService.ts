@@ -1,11 +1,10 @@
 import { randomUUID } from "crypto";
-import { Country } from "../../interfaces/country/country";
-import { countryBD } from "../../interfaces/country/countryBD";
-import { ErrorService } from "../../interfaces/error/errorSrvice";
-import { isValidCountry } from "../../validators/country.validator";
-import { countryes } from "../country/country";
+import { Country } from "../interfaces/country/country";
+import { countryBD } from "../interfaces/country/countryBD";
+import { ErrorService } from "../interfaces/error/errorSrvice";
+import { isValidCountry } from "../validators/country.validator";
+import { countryes } from "../data/country/country";
 import { SuccessService } from "./successService";
-import { DeleteService } from "./deleteService";
 import { UpdateService } from "./updateService";
 
 export function getAllCountryes(): countryBD[] {
