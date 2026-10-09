@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "./successService";
-import { UpdateService } from "./updateService";
-import { DeleteService } from "./deleteService";
+import { SuccessService } from "./success.Service";
+import { UpdateService } from "./update.Service";
+import { DeleteService } from "./delete.Service";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { artists } from "../data/artist/artists";
 import { Artist } from "../interfaces/artist/artist";

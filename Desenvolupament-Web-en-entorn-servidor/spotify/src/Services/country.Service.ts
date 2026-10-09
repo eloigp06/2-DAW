@@ -4,8 +4,8 @@ import { countryBD } from "../interfaces/country/countryBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
 import { isValidCountry } from "../validators/country.validator";
 import { countryes } from "../data/country/country";
-import { SuccessService } from "./successService";
-import { UpdateService } from "./updateService";
+import { SuccessService } from "./success.Service";
+import { UpdateService } from "./update.Service";
 
 export function getAllCountryes(): countryBD[] {
     return countryes;

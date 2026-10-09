@@ -4,9 +4,9 @@ import { TrackBD } from "../interfaces/track/trackBD";
 import { isValidTrack } from "../validators/track.validator";
 import { tracks } from "../data/track/track";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "./successService";
-import { UpdateService } from "./updateService";
-import { DeleteService } from "./deleteService";
+import { SuccessService } from "./success.Service";
+import { UpdateService } from "./update.Service";
+import { DeleteService } from "./delete.Service";
 
 export function getAllTracks(): TrackBD[] {
     return tracks
