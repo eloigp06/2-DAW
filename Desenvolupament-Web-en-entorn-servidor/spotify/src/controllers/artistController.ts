@@ -1,10 +1,10 @@
 import { artists } from "../data/artist/artists";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "../Services/artistService";
-import { DeleteService } from "../Services/deleteService";
-import { SuccessService } from "../Services/successService";
-import { UpdateService } from "../Services/updateService";
+import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "../Services/artist.Service";
+import { DeleteService } from "../Services/delete.Service";
+import { SuccessService } from "../Services/success.Service";
+import { UpdateService } from "../Services/update.Service";
 import { Response, Request } from "express";
 
 export function getAllArtistsController(_req: Request, res: Response): Response {

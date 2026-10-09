@@ -1,10 +1,10 @@
 
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { DeleteService } from "../Services/deleteService";
-import { SuccessService } from "../Services/successService";
-import { UpdateService } from "../Services/updateService";
+import { DeleteService } from "../Services/delete.Service";
+import { SuccessService } from "../Services/success.Service";
+import { UpdateService } from "../Services/update.Service";
 import { Response, Request } from "express";
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../Services/userService";
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../Services/user.Service";
 import { UserBD } from "../interfaces/User/userBD";
 import { users } from "../data/user/user";
 

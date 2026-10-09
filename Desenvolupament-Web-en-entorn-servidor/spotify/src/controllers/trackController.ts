@@ -1,11 +1,11 @@
 import { tracks } from "../data/track/track";
 import { ErrorService } from "../interfaces/error/errorSrvice";
 import { TrackBD } from "../interfaces/track/trackBD";
-import { SuccessService } from "../Services/successService";
-import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "../Services/trackService";
+import { SuccessService } from "../Services/success.Service";
+import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "../Services/track.Service";
 import { Response, Request } from "express";
-import { UpdateService } from "../Services/updateService";
-import { DeleteService } from "../Services/deleteService";
+import { UpdateService } from "../Services/update.Service";
+import { DeleteService } from "../Services/delete.Service";
 
 export function getAllTracksController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllTracks())
