@@ -6,7 +6,7 @@ import { DeleteService } from "./delete.Service";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { artists } from "../data/artist/artists";
 import { Artist } from "../interfaces/artist/artist";
-import { getCanonicalCountry, isValidArtist } from "../validators/artist.validator";
+import { isValidArtist } from "../validators/artist.validator";
 
 export function getAllArtist(): ArtistBD[] {
     return artists;
@@ -28,7 +28,7 @@ export function createArtist(artist: Artist): SuccessService<ArtistBD> | ErrorSe
         id: idartista,
         artist: artist.artist.trim().replace(/\s+/g, " "),
         realName: artist.realName.replace(/\s+/g, " "),
-        country: getCanonicalCountry(artist.country)
+        country: artist.country
     };
     return { success: true, code: 201, data: artistkRecord };
 }

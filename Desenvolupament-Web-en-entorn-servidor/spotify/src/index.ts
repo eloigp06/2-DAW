@@ -8,11 +8,11 @@ import { ErrorService } from "./interfaces/error/errorSrvice";
 import { SuccessService } from "./Services/success.Service";
 import { UpdateService } from "./Services/update.Service";
 import { DeleteService } from "./Services/delete.Service";
-import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "./Services/artist.Service";
 import { createCountrye, getAllCountryes, updateCountry } from "./Services/country.Service";
 import { trackRouter } from "./routes/trackRouter";
 import { artistRouter } from "./routes/artistRouter";
 import { userRouter } from "./routes/userRouter";
+import { countryRouter } from "./routes/countyRouter";
 
 
 const app: Express = express();
@@ -28,39 +28,8 @@ app.use("/artists", artistRouter)
 
 app.use("/users", userRouter);
 
+app.use("/countryes", countryRouter)
 
-
-
-app.get("/countryes", (_req: Request, res: Response) => {
-  return res.status(200).json(getAllCountryes());
-});
-
-app.post("/countryes", (req: Request, res: Response) => {
-  const result: SuccessService<countryBD> | ErrorService = createCountrye(req.body);
-
-  if (!result.success) {
-    const errorResult = result as ErrorService;
-    return res.status(result.code).json({ message: errorResult.message })
-  }
-
-
-  countryes.push((result as SuccessService<countryBD>).data);
-  return res.status(result.code).json(result);
-});
-
-app.put("/countryes/:id", (req: Request, res: Response) => {
-
-  const result: UpdateService<countryBD> | ErrorService = updateCountry(req.body, req.params.id as string);
-
-  if (!result.success) {
-    const errorResult = result as ErrorService;
-    return res.status(result.code).json({ message: errorResult.message })
-  }
-
-  const index: number = (result as UpdateService<countryBD>).index;
-  countryes[index] = (result as UpdateService<countryBD>).data;
-  return res.status(result.code).json(result);
-});
 
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
