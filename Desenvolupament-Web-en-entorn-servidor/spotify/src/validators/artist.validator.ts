@@ -23,15 +23,18 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
         && longRealName <= MAXREALNAME
 
     if (!dadesOK) {
+        console.log("BODY NO VALID");
         return false;
     }
+    const idCountry: string = artist.country;
 
     const countriyOK: countryBD | undefined = countryes.find(
         (c: countryBD) => { c.id === artist.country }
     )
-    if(!countriyOK){
+    if (!countriyOK) {
+        console.log("BODY NO VALID");
         return false;
     }
-
-        return true;
+    console.log("OK")
+    return true;
 }
