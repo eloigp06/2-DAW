@@ -4,6 +4,7 @@ import { trackRouter } from "./routes/trackRouter";
 import { artistRouter } from "./routes/artistRouter";
 import { userRouter } from "./routes/userRouter";
 import { countryRouter } from "./routes/countyRouter";
+import { historyRouter } from "./routes/historyRouter";
 
 
 export const app: Express = express();
@@ -15,11 +16,12 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 
 app.use("/tracks", trackRouter);
 
-app.use("/artists", artistRouter)
+app.use("/artists", artistRouter);
 
 app.use("/users", userRouter);
 
-app.use("/countryes", countryRouter)
+app.use("/countryes", countryRouter);
 
+app.use("/histoyes", historyRouter);
 
 
