@@ -4,4 +4,5 @@ export interface albumBD{
     id: string; //PK
     artist: ArtistBD;
     data: string;
+    title: string
 }

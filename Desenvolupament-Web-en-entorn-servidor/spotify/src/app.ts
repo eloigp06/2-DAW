@@ -5,6 +5,7 @@ import { artistRouter } from "./routes/artistRouter";
 import { userRouter } from "./routes/userRouter";
 import { countryRouter } from "./routes/countyRouter";
 import { historyRouter } from "./routes/historyRouter";
+import { playListRouter } from "./routes/playListRouter";
 
 
 export const app: Express = express();
@@ -24,4 +25,5 @@ app.use("/countryes", countryRouter);
 
 app.use("/histoyes", historyRouter);
 
+app.use("/playLists", playListRouter);
 

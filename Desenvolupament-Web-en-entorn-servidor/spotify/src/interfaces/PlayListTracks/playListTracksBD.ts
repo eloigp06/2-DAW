@@ -1,8 +1,8 @@
-import { playListBD } from "../PlayList/playListBD"
+import { PlayListBD } from "../PlayList/playListBD"
 import { TrackBD } from "../track/trackBD"
 
 export interface playListTracksBD{
     id: string; //PK
-    playList: playListBD;
+    playList: PlayListBD;
     track: TrackBD;
 }
