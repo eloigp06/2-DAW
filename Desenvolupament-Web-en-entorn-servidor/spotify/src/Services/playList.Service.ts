@@ -24,7 +24,7 @@ export function createPlayList(playList: PlayList): SuccessService<PlayList> | E
 
     const uuid: string = randomUUID();
 
-    const playListRecord: PlayList = {
+    const playListRecord: PlayListBD = {
         id: uuid,
         title: playList.title.trim().replace(/\s+/g, " "),
         user: playList.user.trim().replace(/\s+/g, " "),
