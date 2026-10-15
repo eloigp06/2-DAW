@@ -1,8 +1,5 @@
-import { ArtistBD } from "../artist/artistBD"
+import { Album } from "./album";
 
-export interface albumBD{
-    id: string; //PK
-    artist: ArtistBD;
-    data: string;
-    title: string
+export interface AlbumBD extends Album {
+    id: string; // PK
 }
