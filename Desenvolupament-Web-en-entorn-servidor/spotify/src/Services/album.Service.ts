@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { albums } from "../data/album/album";
+import { albums } from "../data/album/albums";
 import { Album } from "../interfaces/Album/album";
 import { AlbumBD } from "../interfaces/Album/albumBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
