@@ -3,9 +3,10 @@ import { ErrorService } from "../interfaces/error/errorSrvice";
 import { User } from "../interfaces/User/user";
 import { UserBD } from "../interfaces/User/userBD";
 import { users } from "../data/user/user";
-import { SuccessService } from "./success.Service";
-import { UpdateService } from "./update.Service";
-import { DeleteService } from "./delete.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { UpdateService } from "../interfaces/error/update.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidUser } from "../validators/user.validator";
 
 

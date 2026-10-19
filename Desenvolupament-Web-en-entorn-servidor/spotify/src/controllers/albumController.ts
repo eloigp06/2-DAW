@@ -9,9 +9,10 @@ import {
   getAlbumById,
   updateAlbum
 } from "../Services/album.Service";
-import { DeleteService } from "../Services/delete.Service";
-import { SuccessService } from "../Services/success.Service";
-import { UpdateService } from "../Services/update.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { UpdateService } from "../interfaces/error/update.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 
 export function getAllAlbumsController(_req: Request, res: Response): Response {
   return res.status(200).json(getAllAlbums());

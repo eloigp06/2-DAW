@@ -1,11 +1,12 @@
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../Services/success.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
 import { Response, Request } from "express";
-import { UpdateService } from "../Services/update.Service";
-import { DeleteService } from "../Services/delete.Service";
+import { UpdateService } from "../interfaces/error/update.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
 import { createPlayList, deletePlayList, getAllPlayList, getPlayListById, updatePlayList } from "../Services/playList.Service";
 import { PlayListBD } from "../interfaces/PlayList/playListBD";
 import { playLists } from "../data/playList/playList";
+
 
 export function getAllPlayListsController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllPlayList())

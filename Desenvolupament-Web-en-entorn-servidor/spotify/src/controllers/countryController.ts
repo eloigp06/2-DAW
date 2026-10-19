@@ -2,8 +2,9 @@ import { countryes } from "../data/country/country";
 import { countryBD } from "../interfaces/country/countryBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
 import { createCountrye, getAllCountryes, updateCountry } from "../Services/country.Service";
-import { SuccessService } from "../Services/success.Service";
-import { UpdateService } from "../Services/update.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { UpdateService } from "../interfaces/error/update.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { Response, Request } from "express";
 
 export function getAllCountryesController(_req: Request, res: Response): Response {

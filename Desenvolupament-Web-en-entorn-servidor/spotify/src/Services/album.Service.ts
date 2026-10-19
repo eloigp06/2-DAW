@@ -3,9 +3,10 @@ import { albums } from "../data/album/albums";
 import { Album } from "../interfaces/Album/album";
 import { AlbumBD } from "../interfaces/Album/albumBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { DeleteService } from "./delete.Service";
-import { SuccessService } from "./success.Service";
-import { UpdateService } from "./update.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { UpdateService } from "../interfaces/error/update.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidAlbum } from "../validators/album.validator";
 
 export function getAllAlbums(): AlbumBD[] {

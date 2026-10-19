@@ -2,7 +2,7 @@ import { ErrorService } from "../interfaces/error/errorSrvice";
 import { historyBD } from "../interfaces/history/historyBD";
 import { createHistory, getHistoryById } from "../Services/history.Service";
 import { Request, Response } from "express";
-import { SuccessService } from "../Services/success.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
 import { historyes } from "../data/history/history";
 
 export function getHistoryByIdController(req: Request, res: Response): Response {

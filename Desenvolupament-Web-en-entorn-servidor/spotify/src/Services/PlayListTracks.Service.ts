@@ -3,8 +3,9 @@ import { playListTracks } from "../data/playListTracks/playListTracks";
 import { PlayListTracks } from "../interfaces/PlayListTracks/playListTracks";
 import { PlayListTracksBD } from "../interfaces/PlayListTracks/playListTracksBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { DeleteService } from "./delete.Service";
-import { SuccessService } from "./success.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidPlayListTrack } from "../validators/playListTracks.validator";
 
 export function getAllPlayListTracks(): PlayListTracksBD[] {

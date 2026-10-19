@@ -9,8 +9,9 @@ import {
   getAllAlbumTracks,
   getTracksByAlbumId
 } from "../Services/AlbumTracks.Service";
-import { DeleteService } from "../Services/delete.Service";
-import { SuccessService } from "../Services/success.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 
 export function getAllAlbumTracksController(_req: Request, res: Response): Response {
   return res.status(200).json(getAllAlbumTracks());

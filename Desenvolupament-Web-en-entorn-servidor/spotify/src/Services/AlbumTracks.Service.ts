@@ -3,8 +3,9 @@ import { albumTracks } from "../data/albumTracks/albumTracks";
 import { AlbumTracks } from "../interfaces/AlbumTracks/albumTracks";
 import { AlbumTracksBD } from "../interfaces/AlbumTracks/albumTracksBD";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { DeleteService } from "./delete.Service";
-import { SuccessService } from "./success.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidAlbumTrack } from "../validators/albumTracks.validator";
 
 export function getAllAlbumTracks(): AlbumTracksBD[] {

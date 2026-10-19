@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "./success.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { historyBD } from "../interfaces/history/historyBD";
 import { historyes } from "../data/history/history";
 import { History } from "../interfaces/history/history";
