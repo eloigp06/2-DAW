@@ -7,8 +7,9 @@ import { Response, Request } from "express";
 import { UpdateService } from "../Services/update.Service";
 import { DeleteService } from "../Services/delete.Service";
 
-export function getAllTracksController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllTracks())
+export async function getAllTracksController(_req: Request, res: Response): Promise<Response> {
+    const tracks: TrackBD[] = await getAllTracks()
+    return res.status(200).json(tracks)
 }
 
 export function getTrackByIdController(req: Request, res: Response): Response {
