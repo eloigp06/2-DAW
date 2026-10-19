@@ -4,9 +4,10 @@ import { TrackBD } from "../interfaces/track/trackBD";
 import { isValidTrack } from "../validators/track.validator";
 import { tracks } from "../data/track/track";
 import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "./success.Service";
-import { UpdateService } from "./update.Service";
-import { DeleteService } from "./delete.Service";
+import { SuccessService } from "../interfaces/error/success.Service";
+import { UpdateService } from "../interfaces/error/update.Service";
+import { DeleteService } from "../interfaces/error/delete.Service";
+import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { getConnection } from "../config/database";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
@@ -15,14 +16,31 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string =  `Select * from Track`;
+    const queryText: string = `Select * from Track`;
 
     const result: IResult<TrackBD> = await request.query(queryText);
     return result.recordset;
 }
-export function getTrackById(idTrack: string): TrackBD | undefined {
+export async function getTrackById(idTrack: string): Promise<SelectSuccessService<TrackBD> | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    return tracks.find((t: TrackBD) => { return t.id === idTrack });
+    const queryText: string = `Select * from Track Where Track.id = @id`;
+    request.input("id", sql.UniqueIdentifier, idTrack);
+    const result: IResult<TrackBD> = await request.query(queryText);
+
+    if (result.recordset.length === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
+    }
+    return {
+        success: true,
+        code: 200,
+        data: result.recordset[0]
+    }
 }
 
 export function createTrack(track: Track): SuccessService<TrackBD> | ErrorService {
@@ -65,12 +83,12 @@ export function updateTrack(track: Track, idTrack: string): UpdateService<TrackB
 }
 
 export function deleteTrack(idTrack: string): DeleteService | ErrorService {
-  const index: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+    const index: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
 
-  if (index === -1) {
-    return { success: false, code: 404, message: " Track not found " }
-  }
+    if (index === -1) {
+        return { success: false, code: 404, message: " Track not found " }
+    }
 
-      return { success: true, code: 404, index: index }
+    return { success: true, code: 404, index: index }
 
 }
