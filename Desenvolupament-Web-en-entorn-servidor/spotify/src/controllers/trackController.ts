@@ -6,7 +6,7 @@ import { Response, Request } from "express";
 import { SuccessService } from "../interfaces/error/success.Service";
 import { UpdateService } from "../interfaces/error/update.Service";
 import { DeleteService } from "../interfaces/error/delete.Service";
-import { CreateSuccessService } from "../interfaces/error/Createsuccess.Service";
+import { CreateSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
 export async function getAllTracksController(_req: Request, res: Response): Promise<Response> {
     const tracks: TrackBD[] = await getAllTracks()
@@ -31,30 +31,23 @@ export async function getPostTrackController(req: Request, res: Response): Promi
     return res.status(result.code).json(result);
 }
 
-export function getPutTrackController(req: Request, res: Response): Response {
-    const result: UpdateService<TrackBD> | ErrorService = updateTrack(req.body, req.params.id as string);
+export async function getPutTrackController(req: Request, res: Response): Promise<Response> {
+    const result: UpdateService<number> | ErrorService = await updateTrack(req.body, req.params.id as string);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as ErrorService; 
         return res.status(result.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as UpdateService<TrackBD>).index;
-    tracks[index] = (result as UpdateService<TrackBD>).data;
     return res.status(result.code).json(result);
 }
 
-export function getDeleteTrackController(req: Request, res: Response): Response {
-      const result: DeleteService | ErrorService = deleteTrack(req.params.id as string);
+export async function getDeleteTrackController(req: Request, res: Response): Promise<Response> {
+      const result: DeleteService | ErrorService = await deleteTrack(req.params.id as string);
     
-      if (!result.success) {
-        const errorResult = result as ErrorService;
+ if (!result.success) {
+        const errorResult = result as ErrorService; 
         return res.status(result.code).json({ message: errorResult.message })
-      }
-    
-      const index: number = (result as DeleteService).index;
-    
-      tracks.splice(index, 1);
-    
-      return res.status(result.code).json(result);
+    }
+    return res.status(result.code).send();
 }
