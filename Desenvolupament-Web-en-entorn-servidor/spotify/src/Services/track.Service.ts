@@ -7,7 +7,7 @@ import { ErrorService } from "../interfaces/error/errorSrvice";
 import { SuccessService } from "../interfaces/error/success.Service";
 import { UpdateService } from "../interfaces/error/update.Service";
 import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { CreateSuccessService } from "../interfaces/error/Createsuccess.Service";
 import { getConnection } from "../config/database";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
@@ -21,7 +21,7 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     const result: IResult<TrackBD> = await request.query(queryText);
     return result.recordset;
 }
-export async function getTrackById(idTrack: string): Promise<SelectSuccessService<TrackBD> | ErrorService> {
+export async function getTrackById(idTrack: string): Promise<SuccessService<TrackBD> | ErrorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
@@ -43,22 +43,24 @@ export async function getTrackById(idTrack: string): Promise<SelectSuccessServic
     }
 }
 
-export function createTrack(track: Track): SuccessService<TrackBD> | ErrorService {
+export async function createTrack(track: Track): Promise<CreateSuccessService<number> | ErrorService> {
 
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const title: string = track.title.replace(/\s+/g, " ")
+    const queryText: string = `INSERT INTO TRACK(title,artist_id,duration)
+    VALUES(@title,@artist_id,@duration)`;
 
-    const uuid: string = randomUUID();
+    request.input("title", sql.NVarChar, title);
+    request.input("artist_id", sql.UniqueIdentifier, track.artist);
+    request.input("duration", sql.Numeric, track.duration)
 
-    const trackRecord: TrackBD = {
-        id: uuid,
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.replace(/\s+/g, " "),
-        duration: track.duration
-    };
+    const result: IResult<number> = await request.query(queryText);
 
-    return { success: true, code: 201, data: trackRecord };
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
 export function updateTrack(track: Track, idTrack: string): UpdateService<TrackBD> | ErrorService {

@@ -6,7 +6,7 @@ import { Response, Request } from "express";
 import { SuccessService } from "../interfaces/error/success.Service";
 import { UpdateService } from "../interfaces/error/update.Service";
 import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { CreateSuccessService } from "../interfaces/error/Createsuccess.Service";
 
 export async function getAllTracksController(_req: Request, res: Response): Promise<Response> {
     const tracks: TrackBD[] = await getAllTracks()
@@ -14,21 +14,20 @@ export async function getAllTracksController(_req: Request, res: Response): Prom
 }
 
 export async function getTrackByIdController(req: Request, res: Response): Promise<Response> {
-    const result: SelectSuccessService<TrackBD> | ErrorService = await getTrackById(req.params.id as string);
+    const result: SuccessService<TrackBD> | ErrorService = await getTrackById(req.params.id as string);
     if (!result.success) {
         return res.status(result.code).json({ message: (result as ErrorService).message })
     }
     return res.status(result.code).json(result);
 }
 
-export function getPostTrackController(req: Request, res: Response): Response {
-    const result: SuccessService<TrackBD> | ErrorService = createTrack(req.body);
+export async function getPostTrackController(req: Request, res: Response): Promise<Response> {
+    const result: CreateSuccessService<TrackBD> | ErrorService = await createTrack(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
-    tracks.push((result as SuccessService<TrackBD>).data);
     return res.status(result.code).json(result);
 }
 
