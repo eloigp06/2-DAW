@@ -6,12 +6,19 @@ import { users } from "../data/user/user";
 import { SuccessService } from "../interfaces/error/success.Service";
 import { UpdateService } from "../interfaces/error/update.Service";
 import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidUser } from "../validators/user.validator";
+import { getConnection } from "../config/database";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
 
 
-export function getAllUsers(): UserBD[] {
-    return users;
+export async function getAllUsers(): Promise<UserBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `Select * from User`;
+    const result: IResult<UserBD> = await request.query(queryText);
+
+    return result.recordset;
 }
 
 export function getUserById(idUser: string): UserBD | undefined {
