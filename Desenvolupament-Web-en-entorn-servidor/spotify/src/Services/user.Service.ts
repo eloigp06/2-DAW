@@ -10,6 +10,7 @@ import { isValidUser } from "../validators/user.validator";
 import { getConnection } from "../config/database";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
+import { CreateSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
 
 export async function getAllUsers(): Promise<UserBD[]> {
@@ -20,60 +21,89 @@ export async function getAllUsers(): Promise<UserBD[]> {
 
     return result.recordset;
 }
+export async function getUserById(idUser: string): Promise<SuccessService<UserBD> | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `Select * from User Where User.id = @id`;
 
-export function getUserById(idUser: string): UserBD | undefined {
-
-    return users.find((u: UserBD) => { return u.id === idUser });
+    request.input("id", sql.UniqueIdentifier, idUser);
+    const result: IResult<UserBD> = await request.query(queryText);
+    if (result.recordset.length === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
+    }
+    return {
+        success: true,
+        code: 200,
+        data: result.recordset[0]
+    }
 }
 
-export function createUser(user: User): SuccessService<UserBD> | ErrorService {
+export async function createUser(user: User): Promise<CreateSuccessService<number> | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `INSERT INTO USER(id,country,email)
+    VALUES(@id,@country,@email)`;
 
+    request.input("country", sql.UniqueIdentifier, user.country);
+    request.input("email", sql.NVarChar, user.email);
 
+    const result: IResult<number> = await request.query(queryText);
+
+    return { success: true, code: 201, data: result.rowsAffected[0] };
+
+}
+
+export async function updateUser(user: User, idUser: string): Promise<UpdateService<UserBD> | ErrorService> {
     if (!isValidUser(user)) {
         return { success: false, code: 400, message: "Invalid data" };
-    }
-
-    const idUser: string = randomUUID()
-    const UserRecord: UserBD = {
-        id: idUser,
-        country: user.country.trim().replace(/\s+/g, " "),
-        email: user.email.trim().replace(/\s+/g, " "),
-
     };
 
-    return { success: true, code: 201, data: UserRecord };
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `UPDATE USER SET
+    country=@country,email=@email 
+    where user.id=@id`;
 
+    request.input("country", sql.NVarChar, user.country);
+    request.input("email", sql.UniqueIdentifier, user.email);
+    request.input("id", sql.UniqueIdentifier, idUser);
+
+
+    const result: IResult<number> = await request.query(queryText);
+    if (result.rowsAffected[0] === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "User not found"
+        }
+    }
+
+    return { success: true, code: 200, data: result.rowsAffected[0] };
 
 }
 
-export function updateUser(user: User, idUser: string): UpdateService<UserBD> | ErrorService {
-    const index: number = users.findIndex((user: UserBD) => user.id === idUser);
+export async function deleteUser(idUser: string): Promise<DeleteService | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    if (index === -1) {
-        return { success: false, code: 404, message: "Country not found" };
+    const queryText: string = `DElete from User Where User.id = @id`;
+    request.input("id", sql.UniqueIdentifier, idUser);
+    const result: IResult<UserBD> = await request.query(queryText);
+
+    if (result.rowsAffected[0] === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "User not found"
+        }
     }
-
-    if (!isValidUser(user)) {
-        return { success: false, code: 400, message: "Invalid data" };
+    return {
+        success: true,
+        code: 204
     }
-
-    const updateUser: UserBD = {
-        id: idUser,
-        country: user.country.replace(/\s+/g, " "),
-        email: user.email.trim().replace(/\s+/g, " "),
-    };
-
-    return { success: true, code: 200, index: index, data: updateUser }
-
-}
-
-export function deleteUser(idUser: string): DeleteService | ErrorService {
-    const index: number = users.findIndex((user: UserBD) => user.id === idUser);
-
-    if (index === -1) {
-        return { success: false, code: 404, message: " User not found " }
-    }
-
-    return { success: true, code: 404, index: index }
 
 }
