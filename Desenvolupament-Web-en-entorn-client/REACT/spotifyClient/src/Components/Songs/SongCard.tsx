@@ -1,17 +1,13 @@
-import { tracks } from "../../Data/track";
-import type { Track } from "../../Interfaces/Track";
+import type { SongCardProms } from "./Types/SongCardProms";
 
-const totalTracks:number = tracks.length;
-const random:number = Math.floor(Math.random() * totalTracks);
-const track:Track = tracks[random];
-const SongCard = () => {
+const SongCard = (props:SongCardProms) => {
     return (
         <>
-            <h1> {track.title}</h1>
-            <p>{track.artist}</p>
-            <p>{track.duration}</p>
+            <h1>{props.trackinfo.title}</h1>
+            <p>{props.trackinfo.artist}</p>
+            <p>{props.trackinfo.duration}</p>
         </>
     )
-} 
+}
 
 export default SongCard;
