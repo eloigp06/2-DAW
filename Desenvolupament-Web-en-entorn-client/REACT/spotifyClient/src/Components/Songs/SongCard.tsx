@@ -1,11 +1,12 @@
-import type { SongCardProms } from "./Types/SongCardProms";
+import type { SongCardProps } from "./Types/SongCardProms";
 
-const SongCard = (props:SongCardProms) => {
+const SongCard = (props:SongCardProps) => {
     return (
         <>
-            <h1>{props.trackinfo.title}</h1>
-            <p>{props.trackinfo.artist}</p>
-            <p>{props.trackinfo.duration}</p>
+            <h1>{props.trackInfo.title}</h1>
+            <p>{props.trackInfo.artist}</p>
+            <p>{props.trackInfo.duration}</p>
+            <p>{props.trackInfo.reproduccions}</p>
         </>
     )
 }
