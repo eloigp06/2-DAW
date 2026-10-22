@@ -1,0 +1,1 @@
+Primer prompt ia: Comprova el funcionament del codi

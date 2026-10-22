@@ -5,7 +5,6 @@ import { PlayListTracksBD } from "../interfaces/PlayListTracks/playListTracksBD"
 import { ErrorService } from "../interfaces/error/errorSrvice";
 import { SuccessService } from "../interfaces/error/success.Service";
 import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidPlayListTrack } from "../validators/playListTracks.validator";
 
 export function getAllPlayListTracks(): PlayListTracksBD[] {
@@ -42,5 +41,5 @@ export function deletePlayListTrack(id: string): DeleteService | ErrorService {
         return { success: false, code: 404, message: "PlayList track relation not found" };
     }
 
-    return { success: true, code: 200, index: index };
+    return { success: true, code: 200 };
 }

@@ -3,7 +3,7 @@ import { ErrorService } from "../interfaces/error/errorSrvice";
 import { SuccessService } from "../interfaces/error/success.Service";
 import { UpdateService } from "../interfaces/error/update.Service";
 import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { SelectSuccessService } from "../interfaces/error/SelectSuccess.Service";
 import { PlayListBD } from "../interfaces/PlayList/playListBD";
 import { playLists } from "../data/playList/playList";
 import { PlayList } from "../interfaces/PlayList/playList";
