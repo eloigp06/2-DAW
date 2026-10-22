@@ -12,6 +12,16 @@ Les proves aixequen l'API en un port local temporal i la tanquen en acabar. Assi
 
 Les proves d'artista i llista de reproduccio documenten el comportament esperat segons els camps del projecte; si fallen, revisa el resultat indicat: no s'ha modificat la implementacio per fer-les passar.
 
+## Proves de lectura amb SQL Server
+
+Amb SQL Server en marxa i les variables del `.env` configurades, executa la prova d'integracio per separat:
+
+```powershell
+npx tsx --test src/test/database.test.ts
+```
+
+Aquesta prova comprova la connexio, el nom de la base de dades, les taules requerides i que `GET /tracks` retorna el mateix nombre de registres que una consulta SQL directa. Només fa `SELECT`; no crea, actualitza ni elimina dades.
+
 ## Prova manual sense SQL Server
 
 1. Arrenca el servidor des de `spotify` amb `npm run dev`.
@@ -64,6 +74,8 @@ Per exemple, amb la base de dades disponible:
 Invoke-RestMethod http://localhost:3000/tracks
 Invoke-RestMethod http://localhost:3000/users
 ```
+
+La ruta `/tracks` llegeix registres de SQL Server. Evita fer servir `/users` per comprovar la resposta HTTP fins que s'hagi revisat el controlador i la consulta d'aquest recurs: el comportament actual no retorna la llista de registres com s'espera.
 
 També pots provar una petició invàlida a tracks sense crear cap registre; la resposta esperada és HTTP 400:
 

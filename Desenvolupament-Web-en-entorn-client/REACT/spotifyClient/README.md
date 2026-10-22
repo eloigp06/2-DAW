@@ -30,3 +30,9 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+## Running tests
+
+Run `npm test` to execute the component and application tests once. The tests use
+Vitest, jsdom, and React Testing Library to verify the rendered song details and
+the application's track selection.
