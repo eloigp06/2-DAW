@@ -8,10 +8,18 @@ const SongCard = (props: SongCardProps) => {
 
 
     let [totalReproductions, setTotalReproductions] = useState<number>(props.trackInfo.reproduccions);
+    let [likes, setLikes] = useState<number>(props.trackInfo.likes);
+    let [viewIcon, setViewIcon] = useState(true);
 
 
-
-
+    function CanviIMG() {
+        if (viewIcon) {
+            setLikes(prev => prev + 1);
+        } else {
+            setLikes(prev => prev - 1);
+        }
+        setViewIcon(prev => !prev);
+    }
 
     function ClickPlay(amount: number) {
         const tr = (prev: number) => { return prev + amount }
@@ -31,6 +39,8 @@ const SongCard = (props: SongCardProps) => {
             <p><button onClick={() => ClickPlay(10)}>Play 10</button></p>
 
 
+            <button onClick={CanviIMG}><img src={viewIcon ? pepoNO : pepoSi} /></button>
+            <p>{likes}</p>
 
 
 
