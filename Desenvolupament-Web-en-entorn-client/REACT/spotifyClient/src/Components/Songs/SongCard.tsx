@@ -26,7 +26,10 @@ const SongCard = (props: SongCardProps) => {
         setTotalReproductions(tr);
     }
 
-
+    function Reset() {
+        setTotalReproductions(0);
+        setLikes(0);
+    }
     return (
         <>
             <h1>{props.trackInfo.title}</h1>
@@ -42,7 +45,7 @@ const SongCard = (props: SongCardProps) => {
             <button onClick={CanviIMG}><img src={viewIcon ? pepoNO : pepoSi} /></button>
             <p>{likes}</p>
 
-
+            <p><button onClick={Reset}>Reset</button></p>
 
         </>
     )
