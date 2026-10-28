@@ -1,8 +1,8 @@
-import type { PlayView } from "./PlayView";
 
 export interface PlayCardProps {
-    PlayInfo: PlayView;
     volupeUp: () => void;
-    volumeDown: () => void; 
-    
+    volumeDown: () => void;
+    volume: number;
+    escolta: boolean;
+
 }

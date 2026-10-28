@@ -5,6 +5,7 @@ import type { TrackView } from './Components/Songs/Types/TrackView.ts';
 import { tracks } from './Data/track.ts';
 import { users } from './Data/user.ts';
 import type { Like } from './Components/Songs/Types/Like.ts';
+import PlayCard from './Components/Playing/PlayCard.tsx';
 
 
 function App() {
@@ -24,8 +25,10 @@ function App() {
   const [now, setNow] = useState(() => new Date());
   const data = now.toLocaleString('ca-ES');
 
+
   function incrementReproduction() {
     const tr = (prev: TrackView): TrackView => {
+      setIsEscoltan(true);
       return {
         ...prev,
         "reproduccions": prev.reproduccions + 1
@@ -86,6 +89,8 @@ function App() {
   }
 
   const [volume, setVolume] = useState<number>(10);
+  const [escolta, setIsEscoltan] = useState(false);
+
 
   function VolumenDown() {
     if (volume > 0) {
@@ -117,12 +122,6 @@ function App() {
             Random
           </button>
         </div>
-
-        <div className="volume">
-          <button onClick={() => VolumenDown()} disabled={volume === 0}>-</button>
-          <span>Volum: {volume}</span>
-          <button onClick={() => VolumenUp()} disabled={volume === 100}>+</button>
-        </div>
       </header>
 
       <SongCard
@@ -130,6 +129,12 @@ function App() {
         play={() => incrementReproduction()}
         like={() => gestionarLikes()}
         reset={() => resetLikesAndReproduccions()}
+      />
+      <PlayCard
+        volupeUp={() => VolumenUp()}
+        volumeDown={() => VolumenDown()}
+        volume={volume}
+        escolta={escolta}
       />
     </>
   )
