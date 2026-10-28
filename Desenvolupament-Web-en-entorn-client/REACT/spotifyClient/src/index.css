@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #121212;
+  color: #fff;
+}
+
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  border-bottom: 1px solid #282828;
+}
+
+.app-header h1 {
+  margin: 0;
+  color: #1db954;
+  letter-spacing: 2px;
+}
+
+.info p {
+  margin: 2px 0;
+  color: #b3b3b3;
+  font-size: 14px;
+  text-align: center;
+}
+
+.controls,
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 20px;
+  background: #1db954;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+button:hover:not(:disabled) {
+  background: #1ed760;
+}
+
+button:disabled {
+  background: #333;
+  color: #777;
+  cursor: not-allowed;
+}

@@ -22,6 +22,7 @@ function App() {
 
   const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [now, setNow] = useState(() => new Date());
+  const data = now.toLocaleString('ca-ES');
 
   function incrementReproduction() {
     const tr = (prev: TrackView): TrackView => {
@@ -33,9 +34,6 @@ function App() {
     setTrack(tr);
   }
 
-  const data = now.toLocaleString('ca-ES');
-
-
   function handleClickRandom() {
     const random = Math.floor(Math.random() * tracks.length);
 
@@ -44,7 +42,7 @@ function App() {
         ...tracks[random],
         "likes": {
           "like": true,
-          "totalLikes": 100
+          "totalLikes": Math.floor(Math.random() * 10000)
         },
         "reproduccions": Math.floor(Math.random() * 10000)
 
@@ -87,17 +85,54 @@ function App() {
     setTrack(tr)
   }
 
+  const [volume, setVolume] = useState<number>(10);
+
+  function VolumenDown() {
+    if (volume > 0) {
+      setVolume(volume - 1);
+    }
+  }
+
+  function VolumenUp() {
+    if (volume < 100) {
+      setVolume(volume + 1);
+    }
+  }
+
   return (
     <>
-      <header>
+      <header className="app-header">
         <h1>SPOTIFY</h1>
-        <p>Usuari: {user.name}</p>
-        <p>Data: {data}</p>
-        <button type="button" onClick={() => setNow(new Date())}>Actualitza data</button>
-        <button type="button" onClick={handleClickRandom}>Random</button>
+
+        <div className="info">
+          <p>Usuari: {user.name}</p>
+          <p>Data: {data}</p>
+        </div>
+
+        <div className="controls">
+          <button type="button" onClick={() => setNow(new Date())}>
+            Actualitza data
+          </button>
+          <button type="button" onClick={handleClickRandom}>
+            Random
+          </button>
+        </div>
+
+        <div className="volume">
+          <button onClick={() => VolumenDown()} disabled={volume === 0}>-</button>
+          <span>Volum: {volume}</span>
+          <button onClick={() => VolumenUp()} disabled={volume === 100}>+</button>
+        </div>
       </header>
-      <SongCard trackInfo={track} play={() => incrementReproduction()} like={() => gestionarLikes()} reset={() => resetLikesAndReproduccions()} />
+
+      <SongCard
+        trackInfo={track}
+        play={() => incrementReproduction()}
+        like={() => gestionarLikes()}
+        reset={() => resetLikesAndReproduccions()}
+      />
     </>
   )
+
 }
 export default App

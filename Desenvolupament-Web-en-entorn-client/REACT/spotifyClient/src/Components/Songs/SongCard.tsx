@@ -17,6 +17,7 @@ const SongCard = (props: SongCardProps) => {
     function ClickReset() {
         props.reset();
     }
+    
     return (
         <>
             <h1>{props.trackInfo.title}</h1>
