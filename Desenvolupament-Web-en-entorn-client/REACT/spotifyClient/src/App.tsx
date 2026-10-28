@@ -1,41 +1,68 @@
 import './App.css'
 import { useState } from 'react';
-import Header from './Components/Header/HeaderCard.tsx'
 import SongCard from './Components/Songs/SongCard.tsx'
 import type { TrackView } from './Components/Songs/Types/TrackView.ts';
 import { tracks } from './Data/track.ts';
-import type { Track } from './Model/Track.ts';
 import { users } from './Data/user.ts';
+
 
 function App() {
 
-  const year: string = new Date().getFullYear().toString();
-const month: string = (new Date().getMonth() + 1).toString();
-const day: string = new Date().getDate().toString();
+  const [track, setTrack] = useState<TrackView>(
+    {
+      ...tracks[Math.floor(Math.random() * tracks.length)],
+      "reproduccions": Math.floor(Math.random() * 1000),
+      "likes": Math.floor(Math.random() * 5000)
+    }
+  );
 
-  const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
+  const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
+  const [now, setNow] = useState(() => new Date());
 
-  const totalTracks: number = tracks.length;
-  const random: number = Math.floor(Math.random() * totalTracks);
-  const track: Track = tracks[random];
+  function incrementReproduction() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...prev,
+        "reproduccions": prev.reproduccions + 1
+      }
+    }
+    setTrack(tr);
+  }
+
+  const data = now.toLocaleString('ca-ES');
 
 
-
-  const trackRW: TrackView = {
+  const trackWR: TrackView = {
     ...track,
-    "reproduccions": Math.floor(Math.random() * 1000),
-    likes: Math.floor(Math.random() * 1000)
+    "reproduccions": Math.floor(Math.random() * 10000),
+    "likes": 10
+  };
+
+
+  function handleClickRandom() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...tracks[(Math.floor(Math.random() * tracks.length))],
+        "reproduccions": Math.floor(Math.random() * 10000),
+        "likes": Math.floor(Math.random() * 3000)
+      }
+    }
+    setTrack(tr);
   };
   return (
     <>
-      <SongCard trackInfo={trackRW} />
-      <Header headerInfo={{ user: randomUser.name, data: `${day}/${month}/${year}` }} />
+      <header>
+        <h1>SPOTIFY</h1>
+        <p>Usuari: {user.name}</p>
+        <p>Data: {data}</p>
+        <button type="button" onClick={() => setNow(new Date())}>Actualitza la data</button>
+        <button type="button" onClick={handleClickRandom}></button>
+      </header>
+      <SongCard trackInfo={trackWR} play={() => incrementReproduction()} />
 
+      <p><button type="button" onClick={handleClickRandom}></button></p>
     </>
   )
 
-
-
 }
-
 export default App
