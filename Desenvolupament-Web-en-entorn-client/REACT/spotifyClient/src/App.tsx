@@ -130,12 +130,14 @@ function App() {
         like={() => gestionarLikes()}
         reset={() => resetLikesAndReproduccions()}
       />
+      <hr />
       <PlayCard
         volupeUp={() => VolumenUp()}
         volumeDown={() => VolumenDown()}
         volume={volume}
         escolta={escolta}
         title={track.title}
+        stop={stop}
       />
     </>
   )

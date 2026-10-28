@@ -5,5 +5,5 @@ export interface PlayCardProps {
     volume: number;
     escolta: boolean;
     title: string;
-
+    stop: () => void;
 }

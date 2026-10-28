@@ -13,6 +13,10 @@ const PlayCard = (props: PlayCardProps) => {
     function VolumenDown() {
         props.volumeDown();
     }
+
+    function StopSong(){
+        props.stop();
+    }
     return (
         <>
             <p>
@@ -21,7 +25,7 @@ const PlayCard = (props: PlayCardProps) => {
                     <span>Volum: {props.volume}</span>
                     <button onClick={() => VolumenUp()} disabled={props.volume === 100}>+</button>
                 </div>
-                <p>{props.escolta ? props.title :  ""}</p>
+                <p>{props.escolta ? props.title : "No song is playing"}</p>
 
             </p>
         </>
