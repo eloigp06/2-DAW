@@ -4,5 +4,6 @@ export interface PlayCardProps {
     volumeDown: () => void;
     volume: number;
     escolta: boolean;
+    title: string;
 
 }

@@ -135,6 +135,7 @@ function App() {
         volumeDown={() => VolumenDown()}
         volume={volume}
         escolta={escolta}
+        title={track.title}
       />
     </>
   )
