@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { SongCardProps } from "./Types/SongCardProps";
 import pepoSi from "../../assets/pepo.png";
 import pepoNO from "../../assets/pepono.png"
@@ -7,19 +6,16 @@ import pepoNO from "../../assets/pepono.png"
 const SongCard = (props: SongCardProps) => {
 
 
-    let [likes, setLikes] = useState<number>(props.trackInfo.likes);
-    let [viewIcon, setViewIcon] = useState(true);
-
-
-    function CanviIMG() {
-
+    function ClickLike() {
+        props.like();
     }
 
     function ClickPlay(){
         props.play();
     }
 
-    function Reset() {
+    function ClickReset() {
+        props.reset();
     }
     return (
         <>
@@ -29,12 +25,14 @@ const SongCard = (props: SongCardProps) => {
 
             <p>Total reproduccions: {props.trackInfo.reproduccions}</p>
             <p><button onClick={() => ClickPlay()}>Play</button></p>
+            
+            <p>
+                <img onClick={() => ClickLike()} src={props.trackInfo.likes.like? pepoSi : pepoNO}/>
+                <p>{props.trackInfo.likes.totalLikes}</p>
+            </p>
+            
 
-
-            <button onClick={CanviIMG}><img src={viewIcon ? pepoNO : pepoSi} /></button>
-            <p>{likes}</p>
-
-            <p><button onClick={Reset}>Reset</button></p>
+            <p><button onClick={() => ClickReset()}>Reset</button></p>
 
         </>
     )
