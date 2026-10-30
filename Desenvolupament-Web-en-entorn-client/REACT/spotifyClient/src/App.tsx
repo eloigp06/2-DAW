@@ -6,6 +6,8 @@ import { tracks } from './Data/track.ts';
 import { users } from './Data/user.ts';
 import type { Like } from './Components/Songs/Types/Like.ts';
 import PlayCard from './Components/Playing/PlayCard.tsx';
+import type { Track } from './Model/Track.ts';
+import SongRow from './Components/Songs/SongRow.tsx';
 
 
 function App() {
@@ -105,41 +107,63 @@ function App() {
   }
 
   return (
-    <>
-      <header className="app-header">
-        <h1>SPOTIFY</h1>
+    <main>
+      <table>
+        <thead>
+          <title>a</title>
+        </thead>
+        <tbody>
+          {
+            tracks.map(
+              (t: Track) => {
+                return <SongRow
+                        key={t.id}
+                        title={t.title}
+                        artist={t.title}
+                        duration={t.duration} />
+              }
+            )
+          }
+        </tbody>
+      </table>
+    </main>
 
-        <div className="info">
-          <p>Usuari: {user.name}</p>
-          <p>Data: {data}</p>
-        </div>
 
-        <div className="controls">
-          <button type="button" onClick={() => setNow(new Date())}>
-            Actualitza data
-          </button>
-          <button type="button" onClick={handleClickRandom}>
-            Random
-          </button>
-        </div>
-      </header>
+    // <>
+    //   <header className="app-header">
+    //     <h1>SPOTIFY</h1>
 
-      <SongCard
-        trackInfo={track}
-        play={() => incrementReproduction()}
-        like={() => gestionarLikes()}
-        reset={() => resetLikesAndReproduccions()}
-      />
-      <hr />
-      <PlayCard
-        volupeUp={() => VolumenUp()}
-        volumeDown={() => VolumenDown()}
-        volume={volume}
-        escolta={escolta}
-        title={track.title}
-        stop={stop}
-      />
-    </>
+    //     <div className="info">
+    //       <p>Usuari: {user.name}</p>
+    //       <p>Data: {data}</p>
+    //     </div>
+
+    //     <div className="controls">
+    //       <button type="button" onClick={() => setNow(new Date())}>
+    //         Actualitza data
+    //       </button>
+    //       <button type="button" onClick={handleClickRandom}>
+    //         Random
+    //       </button>
+    //     </div>
+    //   </header>
+
+    //   <SongCard
+    //     trackInfo={track}
+    //     play={() => incrementReproduction()}
+    //     like={() => gestionarLikes()}
+    //     reset={() => resetLikesAndReproduccions()}
+    //   />
+    //   <hr />
+    //   <PlayCard
+    //     volupeUp={() => VolumenUp()}
+    //     volumeDown={() => VolumenDown()}
+    //     volume={volume}
+    //     escolta={escolta}
+    //     title={track.title}
+    //     stop={stop}
+    //   />
+    // </>
   )
 
 }
