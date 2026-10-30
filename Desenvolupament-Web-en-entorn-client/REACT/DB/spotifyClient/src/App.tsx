@@ -2,7 +2,6 @@ import './App.css'
 import { useState } from 'react';
 import SongCard from './Components/Songs/SongCard.tsx'
 import type { TrackView } from './Components/Songs/Types/TrackView.ts';
-import { tracks } from './Data/track.ts';
 import { users } from './Data/user.ts';
 import type { Like } from './Components/Songs/Types/Like.ts';
 import PlayCard from './Components/Playing/PlayCard.tsx';
@@ -12,6 +11,12 @@ import ListSongs from './Components/Songs/ListSongs.tsx';
 
 
 function App() {
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [volume, setVolume] = useState<number>(10);
+  const [escolta, setIsEscoltan] = useState(false);
+  const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
+  const [now, setNow] = useState(() => new Date());
+  const data = now.toLocaleString('ca-ES');
 
   const [track, setTrack] = useState<TrackView>(() =>
   ({
@@ -23,11 +28,6 @@ function App() {
     }
   }
   ));
-
-  const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
-  const [now, setNow] = useState(() => new Date());
-  const data = now.toLocaleString('ca-ES');
-
 
   function incrementReproduction() {
     const tr = (prev: TrackView): TrackView => {
@@ -91,10 +91,6 @@ function App() {
     setTrack(tr)
   }
 
-  const [volume, setVolume] = useState<number>(10);
-  const [escolta, setIsEscoltan] = useState(false);
-
-
   function VolumenDown() {
     if (volume > 0) {
       setVolume(volume - 1);
@@ -107,65 +103,70 @@ function App() {
     }
   }
 
+  async function carregarDadesTrack(){
+    const resposta: Response = await fetch("http://localhost:300/tracks");
+    const listTrack: Track[] = await resposta.json() as Track[];
+    setTracks(listTrack);
+  }
   return (
-    <main>
-      <table>
-        <thead>
-          <title>a</title>
-        </thead>
-        <tbody>
-          <ListSongs tracks={tracks} />
-          {
-            tracks.map(
-              (t: Track) => {
-                return <SongRow
-                        key={t.id}
-                        title={t.title}
-                        artist={t.title}
-                        duration={t.duration} />
-              }
-            )
-          }
-        </tbody>
-      </table>
-    </main>
+    <>
+      <main>
+        {
+          tracks.length > 0 ?
+            <table>
+              <thead>
+                <title>ListSong</title>
+              </thead>
+              <tbody>
+                <ListSongs tracks={tracks} />
+              </tbody>
+            </table>
+            : <p>
+              <button onClick={carregarDadesTrack}>Carregar Tracks</button>
+              </p>
+        }
 
+        <aside>
 
-    // <>
-    //   <header className="app-header">
-    //     <h1>SPOTIFY</h1>
+          <header className="app-header">
+            <h1>SPOTIFY</h1>
 
-    //     <div className="info">
-    //       <p>Usuari: {user.name}</p>
-    //       <p>Data: {data}</p>
-    //     </div>
+            <div className="info">
+              <p>Usuari: {user.name}</p>
+              <p>Data: {data}</p>
+            </div>
 
-    //     <div className="controls">
-    //       <button type="button" onClick={() => setNow(new Date())}>
-    //         Actualitza data
-    //       </button>
-    //       <button type="button" onClick={handleClickRandom}>
-    //         Random
-    //       </button>
-    //     </div>
-    //   </header>
+            <div className="controls">
+              <button type="button" onClick={() => setNow(new Date())}>
+                Actualitza data
+              </button>
+              <button type="button" onClick={handleClickRandom}>
+                Random
+              </button>
+            </div>
+          </header>
 
-    //   <SongCard
-    //     trackInfo={track}
-    //     play={() => incrementReproduction()}
-    //     like={() => gestionarLikes()}
-    //     reset={() => resetLikesAndReproduccions()}
-    //   />
-    //   <hr />
-    //   <PlayCard
-    //     volupeUp={() => VolumenUp()}
-    //     volumeDown={() => VolumenDown()}
-    //     volume={volume}
-    //     escolta={escolta}
-    //     title={track.title}
-    //     stop={stop}
-    //   />
-    // </>
+          <SongCard
+            trackInfo={track}
+            play={() => incrementReproduction()}
+            like={() => gestionarLikes()}
+            reset={() => resetLikesAndReproduccions()}
+          />
+          <hr />
+          <PlayCard
+            volupeUp={() => VolumenUp()}
+            volumeDown={() => VolumenDown()}
+            volume={volume}
+            escolta={escolta}
+            title={track.title}
+            stop={stop}
+          />
+        </aside>
+
+      </main>
+
+    </>
+
   )
 
 }

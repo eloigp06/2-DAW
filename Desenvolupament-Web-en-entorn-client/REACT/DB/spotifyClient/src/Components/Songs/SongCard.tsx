@@ -31,10 +31,10 @@ const SongCard = (props: SongCardProps) => {
                 <p>Total reproduccions: {props.trackInfo.reproduccions}</p>
                 <p><button onClick={() => ClickPlay()}>Play</button></p>
 
-                <p>
+                <div>
                     <img onClick={() => ClickLike()} src={props.trackInfo.likes.like ? pepoSi : pepoNO} />
                     <p>{props.trackInfo.likes.totalLikes}</p>
-                </p>
+                </div>
 
 
                 <p><button onClick={() => ClickReset()}>Reset</button></p>

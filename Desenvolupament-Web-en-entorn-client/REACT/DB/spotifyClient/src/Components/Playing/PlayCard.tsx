@@ -1,10 +1,7 @@
-
 import type { PlayCardProps } from "./Types/PlayCardProms";
-import '../../index.css'
-
+import '../../index.css';
 
 const PlayCard = (props: PlayCardProps) => {
-
 
     function VolumenUp() {
         props.volupeUp();
@@ -17,20 +14,17 @@ const PlayCard = (props: PlayCardProps) => {
     function StopSong() {
         props.stop();
     }
+
     return (
-        <>
-            <div className="play-card">
-
-                <p>
-                    <button onClick={() => VolumenDown()} disabled={props.volume === 0}>-</button>
-                    <span>Volum: {props.volume}</span>
-                    <button onClick={() => VolumenUp()} disabled={props.volume === 100}>+</button>
-                    <p>{props.escolta ? props.title : "No song is playing"}</p>
-
-                </p>
+        <div className="play-card">
+            <div className="controls">
+                <button onClick={VolumenDown} disabled={props.volume === 0}>-</button>
+                <span>Volum: {props.volume}</span>
+                <button onClick={VolumenUp} disabled={props.volume === 100}>+</button>
             </div>
-        </>
-    )
-}
+            <p>{props.escolta ? props.title : "No song is playing"}</p>
+        </div>
+    );
+};
 
 export default PlayCard;
