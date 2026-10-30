@@ -8,6 +8,7 @@ import type { Like } from './Components/Songs/Types/Like.ts';
 import PlayCard from './Components/Playing/PlayCard.tsx';
 import type { Track } from './Model/Track.ts';
 import SongRow from './Components/Songs/SongRow.tsx';
+import ListSongs from './Components/Songs/ListSongs.tsx';
 
 
 function App() {
@@ -113,6 +114,7 @@ function App() {
           <title>a</title>
         </thead>
         <tbody>
+          <ListSongs tracks={tracks} />
           {
             tracks.map(
               (t: Track) => {
