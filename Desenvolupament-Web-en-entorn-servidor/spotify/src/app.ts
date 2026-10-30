@@ -10,6 +10,13 @@ import { albumRouter } from "./routes/albumRouter";
 import { albumTracksRouter } from "./routes/albumTracksRouter";
 import { playListTracksRouter } from "./routes/playListTracksRouter";
 
+import cors from "cors";
+import { corsOptions } from "./config/cors";
+
+
+
+
+
 
 export const app: Express = express();
 app.use(express.json());
@@ -17,6 +24,7 @@ app.use(express.json());
 app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda però no utilitzada
   return res.json(JSON.stringify(APICONFIG));
 });
+app.use(cors(corsOptions));
 
 app.use("/tracks", trackRouter);
 
@@ -35,4 +43,6 @@ app.use("/albums", albumRouter);
 app.use("/albumTracks", albumTracksRouter);
 
 app.use("/playListTracks", playListTracksRouter);
+
+
 
