@@ -1,5 +1,5 @@
 import type { HeaderCardProps } from "./Types/HeaderCardProms";
-
+import '../../index.css'
 
 const HeaderCard = (props: HeaderCardProps ) => {
     return (
