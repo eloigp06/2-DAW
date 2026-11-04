@@ -24,15 +24,13 @@ export async function getAlbumByIdController(req: Request, res: Response): Promi
   return res.status(result.code).json(result);
 }
 
-export function getPostAlbumController(req: Request, res: Response): Response {
-  const result: successService<AlbumBD> | errorService = createAlbum(req.body);
+export async function getPostAlbumController(req: Request, res: Response): Promise<Response> {
+  const result: createSuccessService<AlbumBD> | errorService = await createAlbum(req.body);
 
   if (!result.success) {
     const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
-
-  albums.push((result as successService<AlbumBD>).data);
   return res.status(result.code).json(result);
 }
 

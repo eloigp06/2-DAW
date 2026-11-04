@@ -27,7 +27,7 @@ export async function getAlbumById(idAlbum: string): Promise<successService<Albu
     const queryText: string = `Select * from Album Where Album.id = @id`;
 
     request.input("id", sql.UniqueIdentifier, idAlbum);
-    const result: IResult<AlbumBD> = await request.query( queryText );
+    const result: IResult<AlbumBD> = await request.query(queryText);
 
     if (result.recordset.length === 0) {
         return { success: false, code: 404, message: "Album not found" };
@@ -35,20 +35,23 @@ export async function getAlbumById(idAlbum: string): Promise<successService<Albu
     return { success: true, code: 200, data: result.recordset[0] };
 }
 
-export function createAlbum(album: Album): SuccessService<AlbumBD> | ErrorService {
+export async function createAlbum(album: Album): Promise<createSuccessService<AlbumBD> | errorService> {
     if (!isValidAlbum(album)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `
+    INSERT INTO Album (artist_id, date, title) VALUES 
+    (@artist, @date, @title)`
+    request.input("artist", sql.UniqueIdentifier, album.artist);
+    request.input("date", sql.Date, album.data);
+    request.input("title", sql.NVarChar, album.title.trim().replace(/\s+/g, " "));
 
-    const idAlbum: string = randomUUID();
-    const albumRecord: AlbumBD = {
-        id: idAlbum,
-        artist: album.artist.trim().replace(/\s+/g, " "),
-        data: album.data.trim().replace(/\s+/g, " "),
-        title: album.title.trim().replace(/\s+/g, " ")
-    };
+    const result: IResult<number> = await request.query(queryText);
 
-    return { success: true, code: 201, data: albumRecord };
+
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
 export function updateAlbum(album: Album, idAlbum: string): UpdateService<AlbumBD> | ErrorService {
