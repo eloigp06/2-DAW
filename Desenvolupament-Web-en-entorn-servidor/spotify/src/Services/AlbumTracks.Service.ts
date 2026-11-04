@@ -33,8 +33,16 @@ export async function getAlbumTrackById(id: string): Promise<successService<Albu
   return { success: true, code: 200, data: result.recordset[0] };
 }
 
-export function getTracksByAlbumId(albumId: string): AlbumTracksBD[] {
-    return albumTracks.filter((at: AlbumTracksBD) => at.album === albumId);
+
+export async function getTracksByAlbumId(albumId: string): Promise<AlbumTracksBD[]> {
+  const pool: ConnectionPool = await getConnection();
+  const request: sql.Request = pool.request();
+  const queryText = `SELECT * FROM AlbumTracks WHERE album_id = @albumId`;
+
+  request.input("albumId", sql.UniqueIdentifier, albumId);
+  const result: IResult<AlbumTracksBD> = await request.query(queryText);
+
+  return result.recordset;
 }
 
 export function createAlbumTrack(albumTrack: AlbumTracks): successService<AlbumTracksBD> | errorService {
