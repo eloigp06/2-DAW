@@ -1,20 +1,16 @@
 import { Request, Response } from "express";
-import { albumTracks } from "../data/albumTracks/albumTracks";
+import { AlbumTracks } from "../interfaces/AlbumTracks/albumTracks";
 import { AlbumTracksBD } from "../interfaces/AlbumTracks/albumTracksBD";
-import { errorService } from "../interfaces/error/errorSrvice";
-import {
-  createAlbumTrack,
-  deleteAlbumTrack,
-  getAlbumTrackById,
-  getAllAlbumTracks,
-  getTracksByAlbumId
-} from "../Services/AlbumTracks.Service";
-import { successService } from "../interfaces/error/success.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
+import {createAlbumTrack, deleteAlbumTrack, getAlbumTrackById, getAllAlbumTracks, getTracksByAlbumId } from "../Services/AlbumTracks.Service";
 
-export function getAllAlbumTracksController(_req: Request, res: Response): Response {
-  return res.status(200).json(getAllAlbumTracks());
+
+export async function getAllAlbumTracksController(_req: Request, res: Response): Promise<Response> {
+    const albumTracks: AlbumTracksBD[] = await getAllAlbumTracks()
+  return res.status(200).json(albumTracks);
 }
 
 export function getAlbumTrackByIdController(req: Request, res: Response): Response {

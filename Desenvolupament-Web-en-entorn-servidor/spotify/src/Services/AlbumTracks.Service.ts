@@ -1,15 +1,21 @@
-import { randomUUID } from "crypto";
-import { albumTracks } from "../data/albumTracks/albumTracks";
 import { AlbumTracks } from "../interfaces/AlbumTracks/albumTracks";
 import { AlbumTracksBD } from "../interfaces/AlbumTracks/albumTracksBD";
 import { errorService } from "../interfaces/error/errorSrvice";
 import { successService } from "../interfaces/error/success.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 import { isValidAlbumTrack } from "../validators/albumTracks.validator";
+import { getConnection } from "../config/database";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
 
-export function getAllAlbumTracks(): AlbumTracksBD[] {
-    return albumTracks;
+export async function getAllAlbumTracks(): Promise<AlbumTracksBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `Select * from AlbumTracks`;
+
+    const result: IResult<AlbumTracksBD> = await request.query(queryText);
+    return result.recordset;
 }
 
 export function getAlbumTrackById(id: string): AlbumTracksBD | undefined {
