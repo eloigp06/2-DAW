@@ -13,8 +13,8 @@ export async function getAllAlbumTracksController(_req: Request, res: Response):
   return res.status(200).json(albumTracks);
 }
 
-export function getAlbumTrackByIdController(req: Request, res: Response): Response {
-  const relation: AlbumTracksBD | undefined = getAlbumTrackById(req.params.id as string);
+export async function getAlbumTrackByIdController(req: Request, res: Response): Promise<Response> {
+  const relation: AlbumTracksBD | undefined = await getAlbumTrackById(req.params.id as string);
   if (!relation) {
     return res.status(404).json({ message: "Album track relation not found" });
   }

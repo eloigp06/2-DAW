@@ -18,8 +18,19 @@ export async function getAllAlbumTracks(): Promise<AlbumTracksBD[]> {
     return result.recordset;
 }
 
-export function getAlbumTrackById(id: string): AlbumTracksBD | undefined {
-    return albumTracks.find((at: AlbumTracksBD) => at.id === id);
+export async function getAlbumTrackById(id: string): Promise<successService<AlbumTracksBD> | errorService> {
+  const pool: ConnectionPool = await getConnection();
+  const request: sql.Request = pool.request();
+  const queryText = `SELECT * FROM AlbumTracks WHERE id = @id`;
+
+  request.input("id", sql.UniqueIdentifier, id);
+  const result: IResult<AlbumTracksBD> = await request.query(queryText);
+
+  if (result.recordset.length === 0) {
+    return { success: false, code: 404, message: "Album track relation not found" };
+  }
+
+  return { success: true, code: 200, data: result.recordset[0] };
 }
 
 export function getTracksByAlbumId(albumId: string): AlbumTracksBD[] {
