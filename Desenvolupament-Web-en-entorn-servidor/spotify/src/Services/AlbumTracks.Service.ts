@@ -2,9 +2,9 @@ import { randomUUID } from "crypto";
 import { albumTracks } from "../data/albumTracks/albumTracks";
 import { AlbumTracks } from "../interfaces/AlbumTracks/albumTracks";
 import { AlbumTracksBD } from "../interfaces/AlbumTracks/albumTracksBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { isValidAlbumTrack } from "../validators/albumTracks.validator";
 
@@ -20,7 +20,7 @@ export function getTracksByAlbumId(albumId: string): AlbumTracksBD[] {
     return albumTracks.filter((at: AlbumTracksBD) => at.album === albumId);
 }
 
-export function createAlbumTrack(albumTrack: AlbumTracks): SuccessService<AlbumTracksBD> | ErrorService {
+export function createAlbumTrack(albumTrack: AlbumTracks): successService<AlbumTracksBD> | errorService {
     if (!isValidAlbumTrack(albumTrack)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
@@ -35,7 +35,7 @@ export function createAlbumTrack(albumTrack: AlbumTracks): SuccessService<AlbumT
     return { success: true, code: 201, data: albumTrackRecord };
 }
 
-export function deleteAlbumTrack(id: string): DeleteService | ErrorService {
+export function deleteAlbumTrack(id: string): deleteService | errorService {
     const index: number = albumTracks.findIndex((at: AlbumTracksBD) => at.id === id);
 
     if (index === -1) {

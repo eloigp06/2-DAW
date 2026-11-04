@@ -1,8 +1,8 @@
-import { ErrorService } from "../interfaces/error/errorSrvice";
+import { errorService } from "../interfaces/error/errorSrvice";
 import { historyBD } from "../interfaces/history/historyBD";
 import { createHistory, getHistoryById } from "../Services/history.Service";
 import { Request, Response } from "express";
-import { SuccessService } from "../interfaces/error/success.Service";
+import { successService } from "../interfaces/error/success.Service";
 import { historyes } from "../data/history/history";
 
 export function getHistoryByIdController(req: Request, res: Response): Response {
@@ -14,12 +14,12 @@ export function getHistoryByIdController(req: Request, res: Response): Response 
 }
 
 export function getPostHistoryController(req: Request, res: Response): Response {
-    const result: SuccessService<historyBD> | ErrorService = createHistory(req.body);
+    const result: successService<historyBD> | errorService = createHistory(req.body);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
-    historyes.push((result as SuccessService<historyBD>).data);
+    historyes.push((result as successService<historyBD>).data);
     return res.status(result.code).json(result);
 }

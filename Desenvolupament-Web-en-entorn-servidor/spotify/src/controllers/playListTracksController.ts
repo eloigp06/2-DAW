@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { playListTracks } from "../data/playListTracks/playListTracks";
 import { PlayListTracksBD } from "../interfaces/PlayListTracks/playListTracksBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
+import { errorService } from "../interfaces/error/errorSrvice";
 import { createPlayListTrack, deletePlayListTrack, getAllPlayListTracks, getPlayListTrackById, getTracksByPlayListId } from "../Services/PlayListTracks.Service";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { successService } from "../interfaces/error/success.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 export function getAllPlayListTracksController(_req: Request, res: Response): Response {
   return res.status(200).json(getAllPlayListTracks());
@@ -24,26 +24,26 @@ export function getTracksByPlayListController(req: Request, res: Response): Resp
 }
 
 export function getPostPlayListTrackController(req: Request, res: Response): Response {
-  const result: SuccessService<PlayListTracksBD> | ErrorService = createPlayListTrack(req.body);
+  const result: successService<PlayListTracksBD> | errorService = createPlayListTrack(req.body);
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  playListTracks.push((result as SuccessService<PlayListTracksBD>).data);
+  playListTracks.push((result as successService<PlayListTracksBD>).data);
   return res.status(result.code).json(result);
 }
 
 export function getDeletePlayListTrackController(req: Request, res: Response): Response {
-  const result: DeleteService | ErrorService = deletePlayListTrack(req.params.id as string);
+  const result: deleteService | errorService = deletePlayListTrack(req.params.id as string);
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  const index: number = (result as DeleteService).index;
+  const index: number = (result as deleteService).index;
   playListTracks.splice(index, 1);
 
   return res.status(result.code).json(result);

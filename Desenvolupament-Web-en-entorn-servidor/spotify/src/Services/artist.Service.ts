@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { artists } from "../data/artist/artists";
@@ -18,7 +18,7 @@ export function getArtistkById(idArtist: string): ArtistBD | undefined {
     return artists.find((a: ArtistBD) => { return a.id === idArtist });
 }
 
-export function createArtist(artist: Artist): SuccessService<ArtistBD> | ErrorService {
+export function createArtist(artist: Artist): successService<ArtistBD> | errorService {
 
     if (!isValidArtist(artist)) {
         return { success: false, code: 400, message: "Invalid data" };
@@ -34,7 +34,7 @@ export function createArtist(artist: Artist): SuccessService<ArtistBD> | ErrorSe
     return { success: true, code: 201, data: artistkRecord };
 }
 
-export function updateArtist(artist: Artist, idArtist: string): UpdateService<ArtistBD> | ErrorService {
+export function updateArtist(artist: Artist, idArtist: string): updateService<ArtistBD> | errorService {
     const index: number = artists.findIndex((artist: ArtistBD) => artist.id === idArtist);
 
     if (index === -1) {
@@ -55,7 +55,7 @@ export function updateArtist(artist: Artist, idArtist: string): UpdateService<Ar
     return { success: true, code: 200, index: index, data: updateArtist }
 }
 
-export function deleteArtist(idArtist: string): DeleteService | ErrorService {
+export function deleteArtist(idArtist: string): deleteService | errorService {
     const index: number = artists.findIndex((artist: ArtistBD) => artist.id === idArtist);
 
     if (index === -1) {

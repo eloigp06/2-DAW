@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { albumTracks } from "../data/albumTracks/albumTracks";
 import { AlbumTracksBD } from "../interfaces/AlbumTracks/albumTracksBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
+import { errorService } from "../interfaces/error/errorSrvice";
 import {
   createAlbumTrack,
   deleteAlbumTrack,
@@ -9,8 +9,8 @@ import {
   getAllAlbumTracks,
   getTracksByAlbumId
 } from "../Services/AlbumTracks.Service";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { successService } from "../interfaces/error/success.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 
 export function getAllAlbumTracksController(_req: Request, res: Response): Response {
@@ -31,26 +31,26 @@ export function getTracksByAlbumController(req: Request, res: Response): Respons
 }
 
 export function getPostAlbumTrackController(req: Request, res: Response): Response {
-  const result: SuccessService<AlbumTracksBD> | ErrorService = createAlbumTrack(req.body);
+  const result: successService<AlbumTracksBD> | errorService = createAlbumTrack(req.body);
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  albumTracks.push((result as SuccessService<AlbumTracksBD>).data);
+  albumTracks.push((result as successService<AlbumTracksBD>).data);
   return res.status(result.code).json(result);
 }
 
 export function getDeleteAlbumTrackController(req: Request, res: Response): Response {
-  const result: DeleteService | ErrorService = deleteAlbumTrack(req.params.id as string);
+  const result: deleteService | errorService = deleteAlbumTrack(req.params.id as string);
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  const index: number = (result as DeleteService).index;
+  const index: number = (result as deleteService).index;
   albumTracks.splice(index, 1);
 
   return res.status(result.code).json(result);

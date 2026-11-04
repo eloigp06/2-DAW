@@ -3,11 +3,11 @@ import { Track } from "../interfaces/track/track";
 import { TrackBD } from "../interfaces/track/trackBD";
 import { isValidTrack } from "../validators/track.validator";
 import { tracks } from "../data/track/track";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
-import { CreateSuccessService } from "../interfaces/error/CreateSuccess.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 import { getConnection } from "../config/database";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
@@ -21,7 +21,7 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     const result: IResult<TrackBD> = await request.query(queryText);
     return result.recordset;
 }
-export async function getTrackById(idTrack: string): Promise<SuccessService<TrackBD> | ErrorService> {
+export async function getTrackById(idTrack: string): Promise<successService<TrackBD> | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
@@ -43,7 +43,7 @@ export async function getTrackById(idTrack: string): Promise<SuccessService<Trac
     }
 }
 
-export async function createTrack(track: Track): Promise<CreateSuccessService<number> | ErrorService> {
+export async function createTrack(track: Track): Promise<createSuccessService<number> | errorService> {
 
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
@@ -63,7 +63,7 @@ export async function createTrack(track: Track): Promise<CreateSuccessService<nu
     return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
-export async function updateTrack(track: Track, idTrack: string): Promise<UpdateService<TrackBD> | ErrorService> {
+export async function updateTrack(track: Track, idTrack: string): Promise<updateService<TrackBD> | errorService> {
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
@@ -93,7 +93,7 @@ export async function updateTrack(track: Track, idTrack: string): Promise<Update
     return { success: true, code: 200, data: result.rowsAffected[0] };
 }
 
-export async function deleteTrack(idTrack: string): Promise<DeleteService | ErrorService> {
+export async function deleteTrack(idTrack: string): Promise<deleteService | errorService> {
     
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();

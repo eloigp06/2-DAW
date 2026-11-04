@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { albums } from "../data/album/albums";
 import { Album } from "../interfaces/Album/album";
 import { AlbumBD } from "../interfaces/Album/albumBD";
 import { deleteService } from "../interfaces/error/delete.Service";
@@ -10,15 +11,16 @@ import { createAlbum, deleteAlbum, getAllAlbums, getAlbumById, updateAlbum } fro
 
 
 export async function getAllAlbumsController(_req: Request, res: Response): Promise<Response> {
-  return res.status(200).json(await getAllAlbums());
+  const albums: AlbumBD[] = await getAllAlbums()
+  return res.status(200).json(albums);
 }
 
-export function getAlbumByIdController(req: Request, res: Response): Response {
-  const findsAlbum: AlbumBD | undefined = getAlbumById(req.params.id as string);
-  if (!findsAlbum) {
-    return res.status(404).json({ message: "Album not found" });
+export async function getAlbumByIdController(req: Request, res: Response): Promise<Response> {
+  const result: successService<AlbumBD> | errorService = await getAlbumById(req.params.id as string);
+  if (!result.success) {
+    return res.status(result.code).json({ message: (result as errorService).message });
   }
-  return res.status(200).json(findsAlbum);
+  return res.status(result.code).json(result);
 }
 
 export function getPostAlbumController(req: Request, res: Response): Response {

@@ -10,16 +10,28 @@ import { getConnection } from "../config/database";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
 
+
 export async function getAllAlbums(): Promise<AlbumBD[]> {
     const pool: ConnectionPool = await getConnection();
-    const result: IResult<AlbumBD> = await pool.request().query(
-        "SELECT id, artist_id AS artist, [date] AS data, title FROM Album"
-    );
+    const request: sql.Request = pool.request();
+        const queryText: string = `Select * from Album`;
+
+    const result: IResult<AlbumBD> = await request.query( queryText);
     return result.recordset;
 }
 
-export function getAlbumById(idAlbum: string): AlbumBD | undefined {
-    return albums.find((a: AlbumBD) => a.id === idAlbum);
+export async function getAlbumById(idAlbum: string): Promise<successService<AlbumBD> | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    request.input("id", sql.UniqueIdentifier, idAlbum);
+    const result: IResult<AlbumBD> = await request.query(
+        "SELECT id, artist_id AS artist, [date] AS data, title FROM Album WHERE id = @id"
+    );
+
+    if (result.recordset.length === 0) {
+        return { success: false, code: 404, message: "Album not found" };
+    }
+    return { success: true, code: 200, data: result.recordset[0] };
 }
 
 export function createAlbum(album: Album): SuccessService<AlbumBD> | ErrorService {

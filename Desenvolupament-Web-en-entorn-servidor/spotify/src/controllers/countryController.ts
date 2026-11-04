@@ -1,9 +1,9 @@
 import { countryes } from "../data/country/country";
 import { countryBD } from "../interfaces/country/countryBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
+import { errorService } from "../interfaces/error/errorSrvice";
 import { createCountrye, getAllCountryes, updateCountry } from "../Services/country.Service";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { Response, Request } from "express";
 
@@ -13,27 +13,27 @@ export function getAllCountryesController(_req: Request, res: Response): Respons
 
 
 export function getPostUserController(req: Request, res: Response): Response {
-    const result: SuccessService<countryBD> | ErrorService = createCountrye(req.body);
+    const result: successService<countryBD> | errorService = createCountrye(req.body);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
 
 
-    countryes.push((result as SuccessService<countryBD>).data);
+    countryes.push((result as successService<countryBD>).data);
     return res.status(result.code).json(result);
 }
 
 export function getPutUserController(req: Request, res: Response): Response {
-    const result: UpdateService<countryBD> | ErrorService = updateCountry(req.body, req.params.id as string);
+    const result: updateService<countryBD> | errorService = updateCountry(req.body, req.params.id as string);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as UpdateService<countryBD>).index;
-    countryes[index] = (result as UpdateService<countryBD>).data;
+    const index: number = (result as updateService<countryBD>).index;
+    countryes[index] = (result as updateService<countryBD>).data;
     return res.status(result.code).json(result);
 }

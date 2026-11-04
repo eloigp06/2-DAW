@@ -1,4 +1,4 @@
-export interface UpdateService<T> {
+export interface updateService<T> {
     success: boolean;
     code: number;
     data: number;

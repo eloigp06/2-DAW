@@ -1,16 +1,16 @@
 import { randomUUID } from "crypto";
-import { ErrorService } from "../interfaces/error/errorSrvice";
+import { errorService } from "../interfaces/error/errorSrvice";
 import { User } from "../interfaces/User/user";
 import { UserBD } from "../interfaces/User/userBD";
 import { users } from "../data/user/user";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { isValidUser } from "../validators/user.validator";
 import { getConnection } from "../config/database";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
-import { CreateSuccessService } from "../interfaces/error/CreateSuccess.Service";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
 
 export async function getAllUsers(): Promise<UserBD[]> {
@@ -21,7 +21,7 @@ export async function getAllUsers(): Promise<UserBD[]> {
 
     return result.recordset;
 }
-export async function getUserById(idUser: string): Promise<SuccessService<UserBD> | ErrorService> {
+export async function getUserById(idUser: string): Promise<successService<UserBD> | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
     const queryText: string = `Select * from User Where User.id = @id`;
@@ -42,7 +42,7 @@ export async function getUserById(idUser: string): Promise<SuccessService<UserBD
     }
 }
 
-export async function createUser(user: User): Promise<CreateSuccessService<number> | ErrorService> {
+export async function createUser(user: User): Promise<createSuccessService<number> | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
     const queryText: string = `INSERT INTO USER(id,country,email)
@@ -57,7 +57,7 @@ export async function createUser(user: User): Promise<CreateSuccessService<numbe
 
 }
 
-export async function updateUser(user: User, idUser: string): Promise<UpdateService<UserBD> | ErrorService> {
+export async function updateUser(user: User, idUser: string): Promise<updateService<UserBD> | errorService> {
     if (!isValidUser(user)) {
         return { success: false, code: 400, message: "Invalid data" };
     };
@@ -86,7 +86,7 @@ export async function updateUser(user: User, idUser: string): Promise<UpdateServ
 
 }
 
-export async function deleteUser(idUser: string): Promise<DeleteService | ErrorService> {
+export async function deleteUser(idUser: string): Promise<deleteService | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 

@@ -2,9 +2,9 @@ import { randomUUID } from "crypto";
 import { playListTracks } from "../data/playListTracks/playListTracks";
 import { PlayListTracks } from "../interfaces/PlayListTracks/playListTracks";
 import { PlayListTracksBD } from "../interfaces/PlayListTracks/playListTracksBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { isValidPlayListTrack } from "../validators/playListTracks.validator";
 
 export function getAllPlayListTracks(): PlayListTracksBD[] {
@@ -19,7 +19,7 @@ export function getTracksByPlayListId(playListId: string): PlayListTracksBD[] {
     return playListTracks.filter((plt: PlayListTracksBD) => plt.playList === playListId);
 }
 
-export function createPlayListTrack(playListTrack: PlayListTracks): SuccessService<PlayListTracksBD> | ErrorService {
+export function createPlayListTrack(playListTrack: PlayListTracks): successService<PlayListTracksBD> | errorService {
     if (!isValidPlayListTrack(playListTrack)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
@@ -34,7 +34,7 @@ export function createPlayListTrack(playListTrack: PlayListTracks): SuccessServi
     return { success: true, code: 201, data: playListTrackRecord };
 }
 
-export function deletePlayListTrack(id: string): DeleteService | ErrorService {
+export function deletePlayListTrack(id: string): deleteService | errorService {
     const index: number = playListTracks.findIndex((plt: PlayListTracksBD) => plt.id === id);
 
     if (index === -1) {

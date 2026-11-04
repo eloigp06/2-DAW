@@ -1,8 +1,8 @@
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
 import { Response, Request } from "express";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { createPlayList, deletePlayList, getAllPlayList, getPlayListById, updatePlayList } from "../Services/playList.Service";
 import { PlayListBD } from "../interfaces/PlayList/playListBD";
 import { playLists } from "../data/playList/playList";
@@ -21,38 +21,38 @@ export function getPlayListByIdController(req: Request, res: Response): Response
 }
 
 export function getPostPLayListController(req: Request, res: Response): Response {
-    const result: SuccessService<PlayListBD> | ErrorService = createPlayList(req.body);
+    const result: successService<PlayListBD> | errorService = createPlayList(req.body);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
-    playLists.push((result as SuccessService<PlayListBD>).data);
+    playLists.push((result as successService<PlayListBD>).data);
     return res.status(result.code).json(result);
 }
 
 export function getPutPlayListController(req: Request, res: Response): Response {
-    const result: UpdateService<PlayListBD> | ErrorService = updatePlayList(req.body, req.params.id as string);
+    const result: updateService<PlayListBD> | errorService = updatePlayList(req.body, req.params.id as string);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as UpdateService<PlayListBD>).index;
-    playLists[index] = (result as UpdateService<PlayListBD>).data;
+    const index: number = (result as updateService<PlayListBD>).index;
+    playLists[index] = (result as updateService<PlayListBD>).data;
     return res.status(result.code).json(result);
 }
 
 export function getDeletePlayListController(req: Request, res: Response): Response {
-      const result: DeleteService | ErrorService = deletePlayList(req.params.id as string);
+      const result: deleteService | errorService = deletePlayList(req.params.id as string);
     
       if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
       }
     
-      const index: number = (result as DeleteService).index;
+      const index: number = (result as deleteService).index;
     
       playLists.splice(index, 1);
     

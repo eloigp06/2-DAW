@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { historyBD } from "../interfaces/history/historyBD";
 import { historyes } from "../data/history/history";
@@ -12,7 +12,7 @@ export function getHistoryById(idHistory: string): historyBD | undefined {
     return historyes.find((h: historyBD) => { return h.id === idHistory });
 }
 
-export function createHistory(history: History): SuccessService<historyBD> | ErrorService {
+export function createHistory(history: History): successService<historyBD> | errorService {
 
     if (!isValidHistory(history)) {
         return { success: false, code: 400, message: "Invalid data" };

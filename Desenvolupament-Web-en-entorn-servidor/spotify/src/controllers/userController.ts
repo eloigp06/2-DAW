@@ -1,8 +1,8 @@
 
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
 import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { Response, Request } from "express";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../Services/user.Service";
@@ -22,38 +22,38 @@ export function getUserByIdController(req: Request, res: Response): Response {
 }
 
 export function getPostUserController(req: Request, res: Response): Response {
-    const result: SuccessService<UserBD> | ErrorService = createUser(req.body);
+    const result: successService<UserBD> | errorService = createUser(req.body);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
-    users.push((result as SuccessService<UserBD>).data);
+    users.push((result as successService<UserBD>).data);
     return res.status(result.code).json(result);
 }
 
 export function getPutUserController(req: Request, res: Response): Response {
-    const result: UpdateService<UserBD> | ErrorService = updateUser(req.body, req.params.id as string);
+    const result: updateService<UserBD> | errorService = updateUser(req.body, req.params.id as string);
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as UpdateService<UserBD>).index;
-    users[index] = (result as UpdateService<UserBD>).data;
+    const index: number = (result as updateService<UserBD>).index;
+    users[index] = (result as updateService<UserBD>).data;
     return res.status(result.code).json(result);
 }
 
 export function getDeleteUserController(req: Request, res: Response): Response {
-      const result: DeleteService | ErrorService = deleteUser(req.params.id as string);
+      const result: deleteService | errorService = deleteUser(req.params.id as string);
     
       if (!result.success) {
-        const errorResult = result as ErrorService;
+        const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
       }
     
-      const index: number = (result as DeleteService).index;
+      const index: number = (result as deleteService).index;
     
       users.splice(index, 1);
     
