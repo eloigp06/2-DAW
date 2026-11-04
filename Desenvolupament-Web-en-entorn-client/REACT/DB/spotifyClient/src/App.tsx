@@ -1,17 +1,17 @@
 import './App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SongCard from './Components/Songs/SongCard.tsx'
 import type { TrackView } from './Components/Songs/Types/TrackView.ts';
 import { users } from './Data/user.ts';
 import type { Like } from './Components/Songs/Types/Like.ts';
 import PlayCard from './Components/Playing/PlayCard.tsx';
-import type { Track } from './Model/Track.ts';
-import SongRow from './Components/Songs/SongRow.tsx';
 import ListSongs from './Components/Songs/ListSongs.tsx';
+import { ENV } from './Config/env.ts';
+import type { GetTrack } from './ApiManagments/Tracks/Interfaces/Track.ts';
 
 
 function App() {
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<GetTrack[]>([]);
   const [volume, setVolume] = useState<number>(10);
   const [escolta, setIsEscoltan] = useState(false);
   const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
@@ -104,10 +104,17 @@ function App() {
   }
 
   async function carregarDadesTrack() {
-    const resposta: Response = await fetch("http://localhost:3000/tracks");
-    const listTrack: Track[] = await resposta.json() as Track[];
+    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
+    const listTrack: GetTrack[] = await resposta.json() as GetTrack[];
     setTracks(listTrack);
   }
+
+  useEffect(
+    () => {
+      carregarDadesTrack();
+    },[]
+  );
+
   return (
     <>
       <main>
@@ -121,9 +128,7 @@ function App() {
                 <ListSongs tracks={tracks} />
               </tbody>
             </table>
-            : <p>
-              <button onClick={carregarDadesTrack}>Carregar Tracks</button>
-            </p>
+            : <p>No tracks avalible</p>
         }
 
         <aside>

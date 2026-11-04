@@ -26,7 +26,7 @@ describe('App', () => {
         screen.getByRole('heading', { level: 1, name: track.title }),
       ).toBeTruthy()
       expect(Array.from(container.querySelectorAll('p')).map((paragraph) => paragraph.textContent))
-        .toEqual([track.artist, String(track.duration), String(expectedPlayCount)])
+        .toEqual([track.artist_id, String(track.duration), String(expectedPlayCount)])
     },
   )
 
@@ -39,7 +39,7 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: firstTrack.title })).toBeTruthy()
     expect(Array.from(container.querySelectorAll('p')).map((paragraph) => paragraph.textContent))
-      .toEqual([firstTrack.artist, String(firstTrack.duration), '0'])
+      .toEqual([firstTrack.artist_id, String(firstTrack.duration), '0'])
   })
 
   it('selects the last available track just below the upper random bound', () => {
@@ -54,7 +54,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1, name: lastTrack.title })).toBeTruthy()
     expect(Array.from(container.querySelectorAll('p')).map((paragraph) => paragraph.textContent))
       .toEqual([
-        lastTrack.artist,
+        lastTrack.artist_id,
         String(lastTrack.duration),
         String(Math.floor((1 - Number.EPSILON) * 1000)),
       ])

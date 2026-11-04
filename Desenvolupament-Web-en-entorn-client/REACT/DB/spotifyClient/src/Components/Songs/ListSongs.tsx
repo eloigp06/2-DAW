@@ -1,6 +1,6 @@
+import type { GetTrack } from "../../ApiManagments/Tracks/Interfaces/Track";
 import SongRow from "./SongRow";
 import type { SongListProps } from "./Types/SongListProps";
-import type { TrackListView } from "./Types/TrackListView copy";
 
 const ListSongs = (props: SongListProps) => {
 
@@ -8,11 +8,11 @@ const ListSongs = (props: SongListProps) => {
         <>
             {
                 props.tracks.map(
-                    (t: TrackListView) => {
+                    (t: GetTrack) => {
                         return <SongRow
                             key={t.id}
                             title={t.title}
-                            artist={t.title}
+                            artist={t.artist_id}
                             duration={t.duration} />
                     }
                 )

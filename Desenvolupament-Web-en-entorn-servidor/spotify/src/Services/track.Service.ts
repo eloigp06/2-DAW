@@ -16,7 +16,7 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = `Select * from Track`;
+    const queryText: string = `Select t.*,a.name from Track t inner join artist a on t.artist_id=a.id`;
 
     const result: IResult<TrackBD> = await request.query(queryText);
     return result.recordset;

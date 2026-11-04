@@ -2,3 +2,24 @@ img {
   max-width: 50px;
   max-height: 50px;
 }
+
+.header-component {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    text-align: right;
+}
+
+.playing-component {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+table {
+    border: 1px solid black;
+    padding: 5px;
+    position: absolute;
+    right: 50px;
+    top: 200px;
+}

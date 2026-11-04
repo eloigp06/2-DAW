@@ -18,7 +18,7 @@ describe('SongCard', () => {
       ).toBeTruthy()
       expect(Array.from(container.querySelectorAll('p')).map((paragraph) => paragraph.textContent))
         .toEqual([
-          trackInfo.artist,
+          trackInfo.artist_id,
           String(trackInfo.duration),
           String(trackInfo.reproduccions),
         ])
@@ -34,6 +34,6 @@ describe('SongCard', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: trackInfo.title })).toBeTruthy()
     expect(Array.from(container.querySelectorAll('p')).map((paragraph) => paragraph.textContent))
-      .toEqual([trackInfo.artist, '0', '0'])
+      .toEqual([trackInfo.artist_id, '0', '0'])
   })
 })
