@@ -1,16 +1,21 @@
-import { randomUUID } from "crypto";
-import { albums } from "../data/album/albums";
 import { Album } from "../interfaces/Album/album";
 import { AlbumBD } from "../interfaces/Album/albumBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 import { isValidAlbum } from "../validators/album.validator";
+import { getConnection } from "../config/database";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
 
-export function getAllAlbums(): AlbumBD[] {
-    return albums;
+export async function getAllAlbums(): Promise<AlbumBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const result: IResult<AlbumBD> = await pool.request().query(
+        "SELECT id, artist_id AS artist, [date] AS data, title FROM Album"
+    );
+    return result.recordset;
 }
 
 export function getAlbumById(idAlbum: string): AlbumBD | undefined {

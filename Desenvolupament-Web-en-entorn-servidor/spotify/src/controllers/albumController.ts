@@ -1,21 +1,16 @@
 import { Request, Response } from "express";
-import { albums } from "../data/album/albums";
+import { Album } from "../interfaces/Album/album";
 import { AlbumBD } from "../interfaces/Album/albumBD";
-import { ErrorService } from "../interfaces/error/errorSrvice";
-import {
-  createAlbum,
-  deleteAlbum,
-  getAllAlbums,
-  getAlbumById,
-  updateAlbum
-} from "../Services/album.Service";
-import { SuccessService } from "../interfaces/error/success.Service";
-import { UpdateService } from "../interfaces/error/update.Service";
-import { DeleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
+import { deleteService } from "../interfaces/error/delete.Service";
+import { errorService } from "../interfaces/error/errorSrvice";
+import { successService } from "../interfaces/error/success.Service";
+import { updateService } from "../interfaces/error/update.Service";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
+import { createAlbum, deleteAlbum, getAllAlbums, getAlbumById, updateAlbum } from "../Services/album.Service";
 
-export function getAllAlbumsController(_req: Request, res: Response): Response {
-  return res.status(200).json(getAllAlbums());
+
+export async function getAllAlbumsController(_req: Request, res: Response): Promise<Response> {
+  return res.status(200).json(await getAllAlbums());
 }
 
 export function getAlbumByIdController(req: Request, res: Response): Response {
@@ -27,42 +22,42 @@ export function getAlbumByIdController(req: Request, res: Response): Response {
 }
 
 export function getPostAlbumController(req: Request, res: Response): Response {
-  const result: SuccessService<AlbumBD> | ErrorService = createAlbum(req.body);
+  const result: successService<AlbumBD> | errorService = createAlbum(req.body);
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  albums.push((result as SuccessService<AlbumBD>).data);
+  albums.push((result as successService<AlbumBD>).data);
   return res.status(result.code).json(result);
 }
 
 export function getPutAlbumController(req: Request, res: Response): Response {
-  const result: UpdateService<AlbumBD> | ErrorService = updateAlbum(
+  const result: updateService<AlbumBD> | errorService = updateAlbum(
     req.body,
     req.params.id as string
   );
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  const index: number = (result as UpdateService<AlbumBD>).index;
-  albums[index] = (result as UpdateService<AlbumBD>).data;
+  const index: number = (result as updateService<AlbumBD>).index;
+  albums[index] = (result as updateService<AlbumBD>).data;
   return res.status(result.code).json(result);
 }
 
 export function getDeleteAlbumController(req: Request, res: Response): Response {
-  const result: DeleteService | ErrorService = deleteAlbum(req.params.id as string);
+  const result: deleteService | errorService = deleteAlbum(req.params.id as string);
 
   if (!result.success) {
-    const errorResult = result as ErrorService;
+    const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
 
-  const index: number = (result as DeleteService).index;
+  const index: number = (result as deleteService).index;
   albums.splice(index, 1);
 
   return res.status(result.code).json(result);
