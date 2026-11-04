@@ -26,15 +26,14 @@ export async function getTracksByAlbumController(req: Request, res: Response): P
   return res.status(200).json(relations);
 }
 
-export function getPostAlbumTrackController(req: Request, res: Response): Response {
-  const result: successService<AlbumTracksBD> | errorService = createAlbumTrack(req.body);
+
+export async function postAlbumTrackController(req: Request, res: Response): Promise<Response> {
+  const result: createSuccessService<AlbumTracksBD> | errorService = await createAlbumTrack(req.body);
 
   if (!result.success) {
-    const errorResult = result as errorService;
-    return res.status(result.code).json({ message: errorResult.message });
+    return res.status(result.code).json({ message: (result as errorService).message });
   }
 
-  albumTracks.push((result as successService<AlbumTracksBD>).data);
   return res.status(result.code).json(result);
 }
 
