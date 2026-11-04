@@ -34,19 +34,13 @@ export async function getPostAlbumController(req: Request, res: Response): Promi
   return res.status(result.code).json(result);
 }
 
-export function getPutAlbumController(req: Request, res: Response): Response {
-  const result: updateService<AlbumBD> | errorService = updateAlbum(
-    req.body,
-    req.params.id as string
-  );
+export async function getPutAlbumController(req: Request, res: Response): Promise<Response> {
+  const result: updateService<AlbumBD> | errorService =  await updateAlbum( req.body, req.params.id as string);
 
   if (!result.success) {
     const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
-
-  const index: number = (result as updateService<AlbumBD>).index;
-  albums[index] = (result as updateService<AlbumBD>).data;
   return res.status(result.code).json(result);
 }
 

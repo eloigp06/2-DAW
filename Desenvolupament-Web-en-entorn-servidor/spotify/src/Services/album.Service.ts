@@ -54,25 +54,29 @@ export async function createAlbum(album: Album): Promise<createSuccessService<Al
     return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
-export function updateAlbum(album: Album, idAlbum: string): UpdateService<AlbumBD> | ErrorService {
-    const index: number = albums.findIndex((a: AlbumBD) => a.id === idAlbum);
+export async function updateAlbum(album: Album, idAlbum: string): Promise<updateService<AlbumBD> | errorService> {
+    if (!isValidAlbum(album)) {
+        return { success: false, code: 400, message: "Invalid data" };
+    }
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `UPDATE Album SET artist_id = @artist, date = @date, title = @title WHERE album.id = @id`
 
-    if (index === -1) {
+    request.input("id", sql.UniqueIdentifier, idAlbum);
+    request.input("artist", sql.UniqueIdentifier, album.artist);
+    request.input("date", sql.Date, album.data);
+    request.input("title", sql.NVarChar, album.title.trim().replace(/\s+/g, " "));
+    const result: IResult<number> = await request.query(queryText);
+
+
+    if (result.rowsAffected[0] === 0) {
         return { success: false, code: 404, message: "Album not found" };
     }
 
     if (!isValidAlbum(album)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
-
-    const updatedAlbum: AlbumBD = {
-        id: idAlbum,
-        artist: album.artist.trim().replace(/\s+/g, " "),
-        data: album.data.trim().replace(/\s+/g, " "),
-        title: album.title.trim().replace(/\s+/g, " ")
-    };
-
-    return { success: true, code: 200, index: index, data: updatedAlbum };
+    return { success: true, code: 200, data: result.rowsAffected[0] };
 }
 
 export function deleteAlbum(idAlbum: string): DeleteService | ErrorService {
