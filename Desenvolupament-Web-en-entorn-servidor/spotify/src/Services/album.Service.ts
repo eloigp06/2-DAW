@@ -79,12 +79,16 @@ export async function updateAlbum(album: Album, idAlbum: string): Promise<update
     return { success: true, code: 200, data: result.rowsAffected[0] };
 }
 
-export function deleteAlbum(idAlbum: string): DeleteService | ErrorService {
-    const index: number = albums.findIndex((a: AlbumBD) => a.id === idAlbum);
+export async function deleteAlbum(idAlbum: string): Promise<deleteService | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    if (index === -1) {
+        const queryText: string = `Delete from Album Where Album.id = @id`;
+    request.input("id", sql.UniqueIdentifier, idAlbum);
+    const result: IResult<AlbumBD> = await request.query(queryText);
+    if (result.rowsAffected[0] === 0) {
         return { success: false, code: 404, message: "Album not found" };
     }
 
-    return { success: true, code: 200, index: index };
+    return { success: true, code: 200};
 }

@@ -44,16 +44,13 @@ export async function getPutAlbumController(req: Request, res: Response): Promis
   return res.status(result.code).json(result);
 }
 
-export function getDeleteAlbumController(req: Request, res: Response): Response {
-  const result: deleteService | errorService = deleteAlbum(req.params.id as string);
+export async function getDeleteAlbumController(req: Request, res: Response): Promise<Response> {
+  const result: deleteService | errorService = await deleteAlbum(req.params.id as string);
 
   if (!result.success) {
     const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
-
-  const index: number = (result as deleteService).index;
-  albums.splice(index, 1);
 
   return res.status(result.code).json(result);
 }
