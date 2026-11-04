@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllAlbumTracksController, getAlbumTrackByIdController, getTracksByAlbumController, getPostAlbumTrackController, getDeleteAlbumTrackController } from "../controllers/albumTracksController";
+import { getAllAlbumTracksController, getAlbumTrackByIdController, getTracksByAlbumController, postAlbumTrackController, getDeleteAlbumTrackController } from "../controllers/albumTracksController";
 
 
 export const albumTracksRouter: Router = Router();
@@ -7,5 +7,5 @@ export const albumTracksRouter: Router = Router();
 albumTracksRouter.get("/", getAllAlbumTracksController);
 albumTracksRouter.get("/:id", getAlbumTrackByIdController);
 albumTracksRouter.get("/album/:albumId", getTracksByAlbumController);
-albumTracksRouter.post("/", getPostAlbumTrackController);
+albumTracksRouter.post("/", postAlbumTrackController);
 albumTracksRouter.delete("/:id", getDeleteAlbumTrackController);
