@@ -14,19 +14,20 @@ import sql from "mssql";
 export async function getAllAlbums(): Promise<AlbumBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-        const queryText: string = `Select * from Album`;
+    const queryText: string = `Select * from Album`;
 
-    const result: IResult<AlbumBD> = await request.query( queryText);
+    const result: IResult<AlbumBD> = await request.query(queryText);
     return result.recordset;
 }
 
 export async function getAlbumById(idAlbum: string): Promise<successService<AlbumBD> | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
+
+    const queryText: string = `Select * from Album Where Album.id = @id`;
+
     request.input("id", sql.UniqueIdentifier, idAlbum);
-    const result: IResult<AlbumBD> = await request.query(
-        "SELECT id, artist_id AS artist, [date] AS data, title FROM Album WHERE id = @id"
-    );
+    const result: IResult<AlbumBD> = await request.query( queryText );
 
     if (result.recordset.length === 0) {
         return { success: false, code: 404, message: "Album not found" };

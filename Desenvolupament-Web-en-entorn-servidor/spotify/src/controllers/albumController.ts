@@ -16,6 +16,7 @@ export async function getAllAlbumsController(_req: Request, res: Response): Prom
 }
 
 export async function getAlbumByIdController(req: Request, res: Response): Promise<Response> {
+  
   const result: successService<AlbumBD> | errorService = await getAlbumById(req.params.id as string);
   if (!result.success) {
     return res.status(result.code).json({ message: (result as errorService).message });
