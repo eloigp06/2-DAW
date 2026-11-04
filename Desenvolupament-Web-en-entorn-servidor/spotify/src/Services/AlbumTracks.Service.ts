@@ -45,25 +45,6 @@ export async function getTracksByAlbumId(albumId: string): Promise<AlbumTracksBD
     return result.recordset;
 }
 
-export async function createAlbum(album: Album): Promise<createSuccessService<AlbumBD> | errorService> {
-    if (!isValidAlbum(album)) {
-        return { success: false, code: 400, message: "Invalid data" };
-    }
-    const pool: ConnectionPool = await getConnection();
-    const request: sql.Request = pool.request();
-    const queryText: string = `
-    INSERT INTO Album (artist_id, date, title) VALUES 
-    (@artist, @date, @title)`
-    request.input("artist", sql.UniqueIdentifier, album.artist);
-    request.input("date", sql.Date, album.data);
-    request.input("title", sql.NVarChar, album.title.trim().replace(/\s+/g, " "));
-
-    const result: IResult<number> = await request.query(queryText);
-
-
-    return { success: true, code: 201, data: result.rowsAffected[0] };
-}
-
 export async function createAlbumTrack(albumTrack: AlbumTracks): Promise<createSuccessService<AlbumTracksBD> | errorService> {
     if (!isValidAlbumTrack(albumTrack)) {
         return { success: false, code: 400, message: "Invalid data" };
@@ -79,12 +60,16 @@ export async function createAlbumTrack(albumTrack: AlbumTracks): Promise<createS
     return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
-export function deleteAlbumTrack(id: string): deleteService | errorService {
-    const index: number = albumTracks.findIndex((at: AlbumTracksBD) => at.id === id);
+export async function deleteAlbumTrack(id: string): Promise<deleteService | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `Delete from AlbumTrack Where AlbumTrack.id = @id`;
 
-    if (index === -1) {
-        return { success: false, code: 404, message: "Album track relation not found" };
+    request.input("id", sql.UniqueIdentifier, id);
+    const result: IResult<AlbumTracksBD> = await request.query(queryText);
+    if (result.rowsAffected[0] === 0) {
+        return { success: false, code: 404, message: "AlbumTracks not found" };
     }
 
-    return { success: true, code: 200, index: index };
+    return { success: true, code: 200 };
 }

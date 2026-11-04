@@ -37,16 +37,13 @@ export async function postAlbumTrackController(req: Request, res: Response): Pro
   return res.status(result.code).json(result);
 }
 
-export function getDeleteAlbumTrackController(req: Request, res: Response): Response {
-  const result: deleteService | errorService = deleteAlbumTrack(req.params.id as string);
+export async function getDeleteAlbumTrackController(req: Request, res: Response): Promise<Response> {
+  const result: deleteService | errorService = await deleteAlbumTrack(req.params.id as string);
 
   if (!result.success) {
     const errorResult = result as errorService;
     return res.status(result.code).json({ message: errorResult.message });
   }
-
-  const index: number = (result as deleteService).index;
-  albumTracks.splice(index, 1);
 
   return res.status(result.code).json(result);
 }
