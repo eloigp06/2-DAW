@@ -103,8 +103,8 @@ function App() {
     }
   }
 
-  async function carregarDadesTrack(){
-    const resposta: Response = await fetch("http://localhost:300/tracks");
+  async function carregarDadesTrack() {
+    const resposta: Response = await fetch("http://localhost:3000/tracks");
     const listTrack: Track[] = await resposta.json() as Track[];
     setTracks(listTrack);
   }
@@ -123,7 +123,7 @@ function App() {
             </table>
             : <p>
               <button onClick={carregarDadesTrack}>Carregar Tracks</button>
-              </p>
+            </p>
         }
 
         <aside>
