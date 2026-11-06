@@ -17,6 +17,19 @@ function App() {
   const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [now, setNow] = useState(() => new Date());
   const data = now.toLocaleString('ca-ES');
+  const [playingTitle, setIsPlaying] = useState<string | null>(null);
+
+  async function carregarDadesTrack() {
+    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
+    const listTrack: GetTrack[] = await resposta.json() as GetTrack[];
+    setTracks(listTrack);
+  }
+
+  useEffect(
+    () => {
+      carregarDadesTrack();
+    }, []
+  );
 
   const [track, setTrack] = useState<TrackView>(() =>
   ({
@@ -91,6 +104,11 @@ function App() {
     setTrack(tr)
   }
 
+  function playNoPlay() {
+    incrementReproduction();
+    setIsPlaying(track.title);
+  }
+
   function VolumenDown() {
     if (volume > 0) {
       setVolume(volume - 1);
@@ -103,17 +121,7 @@ function App() {
     }
   }
 
-  async function carregarDadesTrack() {
-    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
-    const listTrack: GetTrack[] = await resposta.json() as GetTrack[];
-    setTracks(listTrack);
-  }
 
-  useEffect(
-    () => {
-      carregarDadesTrack();
-    },[]
-  );
 
   return (
     <>
@@ -153,7 +161,7 @@ function App() {
 
           <SongCard
             trackInfo={track}
-            play={() => incrementReproduction()}
+            play={playNoPlay}
             like={() => gestionarLikes()}
             reset={() => resetLikesAndReproduccions()}
           />
@@ -164,7 +172,9 @@ function App() {
             volume={volume}
             escolta={escolta}
             title={track.title}
-            stop={stop}
+            playingTitle={playingTitle}
+            stop={() => setIsPlaying(null)}
+
           />
         </aside>
 
@@ -176,3 +186,5 @@ function App() {
 
 }
 export default App
+
+

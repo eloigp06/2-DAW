@@ -11,10 +11,6 @@ const PlayCard = (props: PlayCardProps) => {
         props.volumeDown();
     }
 
-    function StopSong() {
-        props.stop();
-    }
-
     return (
         <div className="play-card">
             <div className="controls">
@@ -22,7 +18,11 @@ const PlayCard = (props: PlayCardProps) => {
                 <span>Volum: {props.volume}</span>
                 <button onClick={VolumenUp} disabled={props.volume === 100}>+</button>
             </div>
-            <p>{props.escolta ? props.title : "No song is playing"}</p>
+            
+            <p>{props.escolta ?? 'No song is playing'}</p>
+            {props.playingTitle !== null && (
+                <button type="button" onClick={props.stop}>Stop</button>
+            )}
         </div>
     );
 };

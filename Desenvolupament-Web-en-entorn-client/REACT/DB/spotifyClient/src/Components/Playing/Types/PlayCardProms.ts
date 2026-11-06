@@ -6,4 +6,5 @@ export interface PlayCardProps {
     escolta: boolean;
     title: string;
     stop: () => void;
+    playingTitle: string | null;
 }
