@@ -35,7 +35,7 @@ export async function getAlbumById(idAlbum: string): Promise<successService<Albu
     return { success: true, code: 200, data: result.recordset[0] };
 }
 
-export async function createAlbum(album: Album): Promise<createSuccessService<AlbumBD> | errorService> {
+export async function createAlbum(album: Album): Promise<createSuccessService | errorService> {
     if (!isValidAlbum(album)) {
         return { success: false, code: 400, message: "Invalid data" };
     }

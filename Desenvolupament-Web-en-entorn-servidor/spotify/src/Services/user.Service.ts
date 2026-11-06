@@ -42,7 +42,7 @@ export async function getUserById(idUser: string): Promise<successService<UserBD
     }
 }
 
-export async function createUser(user: User): Promise<createSuccessService<number> | errorService> {
+export async function createUser(user: User): Promise<createSuccessService | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
     const queryText: string = `INSERT INTO USER(id,country,email)

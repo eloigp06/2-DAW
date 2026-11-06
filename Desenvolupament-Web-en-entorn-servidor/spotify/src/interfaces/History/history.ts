@@ -3,5 +3,4 @@
 export interface History {
     user: string; //FK
     track: string; //FK
-    data: string;
 }

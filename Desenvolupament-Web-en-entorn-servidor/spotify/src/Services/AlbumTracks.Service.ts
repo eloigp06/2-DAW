@@ -45,7 +45,7 @@ export async function getTracksByAlbumId(albumId: string): Promise<AlbumTracksBD
     return result.recordset;
 }
 
-export async function createAlbumTrack(albumTrack: AlbumTracks): Promise<createSuccessService<AlbumTracksBD> | errorService> {
+export async function createAlbumTrack(albumTrack: AlbumTracks): Promise<createSuccessService | errorService> {
     if (!isValidAlbumTrack(albumTrack)) {
         return { success: false, code: 400, message: "Invalid data" };
     }

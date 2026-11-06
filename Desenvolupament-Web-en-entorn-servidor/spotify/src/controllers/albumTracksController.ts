@@ -28,7 +28,7 @@ export async function getTracksByAlbumController(req: Request, res: Response): P
 
 
 export async function postAlbumTrackController(req: Request, res: Response): Promise<Response> {
-  const result: createSuccessService<AlbumTracksBD> | errorService = await createAlbumTrack(req.body);
+  const result: createSuccessService | errorService = await createAlbumTrack(req.body);
 
   if (!result.success) {
     return res.status(result.code).json({ message: (result as errorService).message });

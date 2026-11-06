@@ -43,7 +43,7 @@ export async function getTrackById(idTrack: string): Promise<successService<Trac
     }
 }
 
-export async function createTrack(track: Track): Promise<createSuccessService<number> | errorService> {
+export async function createTrack(track: Track): Promise<createSuccessService | errorService> {
 
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
