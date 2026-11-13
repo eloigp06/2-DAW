@@ -6,10 +6,7 @@ import { tracks } from './Data/track.ts';
 import { users } from './Data/user.ts';
 import type { Like } from './Components/Songs/Types/Like.ts';
 import PlayCard from './Components/Playing/PlayCard.tsx';
-import type { Track } from './Model/Track.ts';
-import SongRow from './Components/Songs/SongRow.tsx';
 import ListSongs from './Components/Songs/ListSongs.tsx';
-
 
 function App() {
 
@@ -26,18 +23,32 @@ function App() {
 
   const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [now, setNow] = useState(() => new Date());
+  const [history, setHistory] = useState<{ title: string; artist: string; date: string }[]>([]);
   const data = now.toLocaleString('ca-ES');
 
 
   function incrementReproduction() {
+    setHistory((prev) => [
+      ...prev,
+      {
+        title: track.title,
+        artist: track.artist,
+        date: new Date().toLocaleString('ca-Es')
+      }
+    ]);
+
     const tr = (prev: TrackView): TrackView => {
       setIsEscoltan(true);
       return {
         ...prev,
-        "reproduccions": prev.reproduccions + 1
+        reproduccions: prev.reproduccions + 1
       }
     }
     setTrack(tr);
+  }
+
+  function stopSong() {
+    setIsEscoltan(false);
   }
 
   function handleClickRandom() {
@@ -108,64 +119,80 @@ function App() {
   }
 
   return (
-    <main>
-      <table>
-        <thead>
-          <title>a</title>
-        </thead>
-        <tbody>
-          <ListSongs tracks={tracks} />
+    <>
+      <main>
+        <div className="track-tables">
           {
-            tracks.map(
-              (t: Track) => {
-                return <SongRow
-                        key={t.id}
-                        title={t.title}
-                        artist={t.title}
-                        duration={t.duration} />
-              }
-            )
+            tracks.length > 0 ?
+              <table>
+                <thead>
+                  <title>ListSong</title>
+                </thead>
+                <tbody>
+                  <ListSongs tracks={tracks} />
+                </tbody>
+              </table>
+              : <></>
           }
-        </tbody>
-      </table>
-    </main>
 
+          <section className="song-history">
+            <h2>Historial de reproduccions</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Canço</th>
+                  <th>Artista</th>
+                  <th>Data i hora</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((entry, index) => (
+                  <tr key={`${entry.date}-${index}`}>
+                    <td>{entry.title}</td>
+                    <td>{entry.artist}</td>
+                    <td>{entry.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        </div>
 
-    // <>
-    //   <header className="app-header">
-    //     <h1>SPOTIFY</h1>
+        <aside>
+          <header className="app-header">
+            <div className="info">
+              <span>Usuari: {user.name}</span>
+              <span>Data: {data}</span>
+            </div>
 
-    //     <div className="info">
-    //       <p>Usuari: {user.name}</p>
-    //       <p>Data: {data}</p>
-    //     </div>
+            <div className="controls">
+              <button type="button" onClick={() => setNow(new Date())}>
+                Actualitza data
+              </button>
+              <button type="button" onClick={handleClickRandom}>
+                Random
+              </button>
+            </div>
+          </header>
 
-    //     <div className="controls">
-    //       <button type="button" onClick={() => setNow(new Date())}>
-    //         Actualitza data
-    //       </button>
-    //       <button type="button" onClick={handleClickRandom}>
-    //         Random
-    //       </button>
-    //     </div>
-    //   </header>
-
-    //   <SongCard
-    //     trackInfo={track}
-    //     play={() => incrementReproduction()}
-    //     like={() => gestionarLikes()}
-    //     reset={() => resetLikesAndReproduccions()}
-    //   />
-    //   <hr />
-    //   <PlayCard
-    //     volupeUp={() => VolumenUp()}
-    //     volumeDown={() => VolumenDown()}
-    //     volume={volume}
-    //     escolta={escolta}
-    //     title={track.title}
-    //     stop={stop}
-    //   />
-    // </>
+          <SongCard
+            trackInfo={track}
+            play={incrementReproduction}
+            like={() => gestionarLikes()}
+            reset={() => resetLikesAndReproduccions()}
+          />
+          <hr />
+          <PlayCard
+            volupeUp={() => VolumenUp()}
+            volumeDown={() => VolumenDown()}
+            volume={volume}
+            escolta={escolta}
+            title={track.title}
+            stop={stopSong}
+          />
+        </aside>
+      </main>
+    </>
   )
 
 }

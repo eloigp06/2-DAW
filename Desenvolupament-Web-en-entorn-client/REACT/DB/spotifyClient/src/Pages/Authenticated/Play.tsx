@@ -13,7 +13,7 @@ const Play = () => {
 
     const [tracks, setTracks] = useState<GetTrack[]>([]);
     const [volume, setVolume] = useState<number>(10);
-    const [escolta, setIsEscoltan] = useState(false);
+    const [escolta] = useState(false);
     const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
     const [now, setNow] = useState(() => new Date());
     const data = now.toLocaleString('ca-ES');

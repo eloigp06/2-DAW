@@ -24,17 +24,17 @@ const SongCard = (props: SongCardProps) => {
 
 
 
-                <h1>{props.trackInfo.title}</h1>
-                <p>{props.trackInfo.artist}</p>
-                <p>{props.trackInfo.duration}</p>
+                <h1>Títol: {props.trackInfo.title}</h1>
+                <p>Artist: {props.trackInfo.artist}</p>
+                <p>Duration: {props.trackInfo.duration}</p>
 
                 <p>Total reproduccions: {props.trackInfo.reproduccions}</p>
                 <p><button onClick={() => ClickPlay()}>Play</button></p>
 
-                <p>
+                <div>
                     <img onClick={() => ClickLike()} src={props.trackInfo.likes.like ? pepoSi : pepoNO} />
                     <p>{props.trackInfo.likes.totalLikes}</p>
-                </p>
+                </div>
 
 
                 <p><button onClick={() => ClickReset()}>Reset</button></p>

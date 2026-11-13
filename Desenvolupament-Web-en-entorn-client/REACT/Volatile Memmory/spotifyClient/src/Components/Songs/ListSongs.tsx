@@ -1,6 +1,6 @@
 import SongRow from "./SongRow";
 import type { SongListProps } from "./Types/SongListProps";
-import type { TrackListView } from "./Types/TrackListView copy";
+import type { TrackListView } from "./Types/TrackListView";
 
 const ListSongs = (props: SongListProps) => {
 
@@ -12,7 +12,7 @@ const ListSongs = (props: SongListProps) => {
                         return <SongRow
                             key={t.id}
                             title={t.title}
-                            artist={t.title}
+                            artist={t.artist}
                             duration={t.duration} />
                     }
                 )
