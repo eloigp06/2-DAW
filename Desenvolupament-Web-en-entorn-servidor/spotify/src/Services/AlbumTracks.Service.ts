@@ -34,7 +34,7 @@ export async function getAlbumTrackById(id: string): Promise<successService<Albu
 }
 
 
-export async function getTracksByAlbumId(albumId: string): Promise<AlbumTracksBD[]> {
+export async function getTracksByAlbumId(albumId: string): Promise<AlbumTracksBD[] | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
     const queryText = `SELECT * FROM AlbumTracks WHERE album_id = @albumId`;
@@ -63,7 +63,7 @@ export async function createAlbumTrack(albumTrack: AlbumTracks): Promise<createS
 export async function deleteAlbumTrack(id: string): Promise<deleteService | errorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = `Delete from AlbumTrack Where AlbumTrack.id = @id`;
+    const queryText: string = `Delete from AlbumTracks Where AlbumTracks.id = @id`;
 
     request.input("id", sql.UniqueIdentifier, id);
     const result: IResult<AlbumTracksBD> = await request.query(queryText);

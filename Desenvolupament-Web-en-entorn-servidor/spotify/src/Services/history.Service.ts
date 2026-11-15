@@ -6,7 +6,7 @@ import { historyes } from "../data/history/history";
 import { History } from "../interfaces/history/history";
 import { isValidHistory } from "../validators/history.validator";
 import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
-import sql, { ConnectionPool, IResult, UniqueIdentifier } from "mssql"
+import sql, { ConnectionPool, IResult } from "mssql"
 import { getConnection } from "../config/database";
 
 export function getHistoryById(idHistory: string): historyBD | undefined {
@@ -25,7 +25,7 @@ export function createHistory(history: historyBD): successService<historyBD> | e
     const historyRecord: historyBD = {
         id: uuid,
         user: history.user.trim().replace(/\s+/g, " "),
-        track: history.track.replace(/\s+/g, " "),
+        track: history.track.trim().replace(/\s+/g, " "),
         data: history.data
     };
 

@@ -42,7 +42,7 @@ export async function createAlbum(album: Album): Promise<createSuccessService | 
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
     const queryText: string = `
-    INSERT INTO Album (artist_id, date, title) VALUES 
+    INSERT INTO Album (artist_id, [date], title) VALUES 
     (@artist, @date, @title)`
     request.input("artist", sql.UniqueIdentifier, album.artist);
     request.input("date", sql.Date, album.data);
@@ -54,13 +54,14 @@ export async function createAlbum(album: Album): Promise<createSuccessService | 
     return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
-export async function updateAlbum(album: Album, idAlbum: string): Promise<updateService<AlbumBD> | errorService> {
+export async function updateAlbum(album: Album, idAlbum: string): Promise<updateService<number> | errorService> {
     if (!isValidAlbum(album)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = `UPDATE Album SET artist_id = @artist, date = @date, title = @title WHERE album.id = @id`
+    const queryText: string = `UPDATE Album SET artist_id = @artist, date = @date, title = @title 
+        WHERE album.id = @id`
 
     request.input("id", sql.UniqueIdentifier, idAlbum);
     request.input("artist", sql.UniqueIdentifier, album.artist);
@@ -73,9 +74,6 @@ export async function updateAlbum(album: Album, idAlbum: string): Promise<update
         return { success: false, code: 404, message: "Album not found" };
     }
 
-    if (!isValidAlbum(album)) {
-        return { success: false, code: 400, message: "Invalid data" };
-    }
     return { success: true, code: 200, data: result.rowsAffected[0] };
 }
 

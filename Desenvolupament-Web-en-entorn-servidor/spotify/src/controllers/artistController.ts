@@ -1,7 +1,7 @@
 import { artists } from "../data/artist/artists";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { errorService } from "../interfaces/error/errorSrvice";
-import { createArtist, deleteArtist, getAllArtist, getArtistkById, updateArtist } from "../Services/artist.Service";
+import { createArtist, deleteArtist, getAllArtist, getArtistById, updateArtist } from "../Services/artist.Service";
 import { successService } from "../interfaces/error/success.Service";
 import { updateService } from "../interfaces/error/update.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
@@ -13,7 +13,7 @@ export function getAllArtistsController(_req: Request, res: Response): Response 
 }
 
 export function getArtistByIdController(req: Request, res: Response): Response {
-    const findsArtist: ArtistBD | undefined = getArtistkById(req.params.id as string);
+    const findsArtist: ArtistBD | undefined = getArtistById(req.params.id as string);
     if (!findsArtist) {
         return res.status(404).json({ message: "Artist not found" })
     }
