@@ -3,7 +3,6 @@ import { successService } from "../interfaces/error/success.Service";
 import { updateService } from "../interfaces/error/update.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
 import { ArtistBD } from "../interfaces/artist/artistBD";
-import { artists } from "../data/artist/artists";
 import { Artist } from "../interfaces/artist/artist";
 import { isValidArtist } from "../validators/artist.validator";
 import { getConnection } from "../config/database";

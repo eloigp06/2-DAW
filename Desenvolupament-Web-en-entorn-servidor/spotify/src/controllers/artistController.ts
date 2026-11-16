@@ -1,4 +1,3 @@
-import { artists } from "../data/artist/artists";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { errorService } from "../interfaces/error/errorSrvice";
 import { createArtist, deleteArtist, getAllArtist, getArtistById, updateArtist } from "../Services/artist.Service";
