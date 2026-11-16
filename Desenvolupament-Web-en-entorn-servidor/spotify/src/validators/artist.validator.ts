@@ -26,12 +26,11 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
         console.log("BODY NO VALID");
         return false;
     }
-    const idCountry: string = artist.country;
 
-    const countriyOK: countryBD | undefined = countryes.find(
-        (c: countryBD) => { c.id === artist.country }
-    )
-    if (!countriyOK) {
+    const countryOK = countryes.find(
+        (c: countryBD) => c.id === artist.country
+    );
+    if (!countryOK) {
         console.log("BODY NO VALID");
         return false;
     }

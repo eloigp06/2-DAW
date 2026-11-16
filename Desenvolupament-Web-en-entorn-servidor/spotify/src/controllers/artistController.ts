@@ -5,56 +5,53 @@ import { createArtist, deleteArtist, getAllArtist, getArtistById, updateArtist }
 import { successService } from "../interfaces/error/success.Service";
 import { updateService } from "../interfaces/error/update.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
 import { Response, Request } from "express";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
-export function getAllArtistsController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllArtist())
+export async function getAllArtistsController(_req: Request, res: Response): Promise<Response> {
+
+    const artists: ArtistBD[] = await getAllArtist();
+
+    return res.status(200).json(artists);
 }
 
-export function getArtistByIdController(req: Request, res: Response): Response {
-    const findsArtist: ArtistBD | undefined = getArtistById(req.params.id as string);
-    if (!findsArtist) {
-        return res.status(404).json({ message: "Artist not found" })
+export async function getArtistByIdController(req: Request, res: Response): Promise<Response> {
+    const result: successService<ArtistBD> | errorService = await getArtistById(req.params.id as string);
+    if (!result.success) {
+        return res.status(result.code).json({ message: (result as errorService).message })
     }
-    return res.status(200).json(findsArtist);
+    return res.status(result.code).json(result);
 }
 
-export function getPostArtistController(req: Request, res: Response): Response {
-    const result: successService<ArtistBD> | errorService = createArtist(req.body);
+export async function getPostArtistController(req: Request, res: Response): Promise<Response> {
+    const result: createSuccessService | errorService = await createArtist(req.body);
 
     if (!result.success) {
         const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
-    artists.push((result as successService<ArtistBD>).data);
     return res.status(result.code).json(result);
+
 }
 
-export function getPutArtistController(req: Request, res: Response): Response {
-    const result: updateService<ArtistBD> | errorService = updateArtist(req.body, req.params.id as string);
+export async function getPutArtistController(req: Request, res: Response): Promise<Response> {
+    const result: updateService<number> | errorService = await updateArtist(req.body, req.params.id as string);
 
     if (!result.success) {
         const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as updateService<ArtistBD>).index;
-    artists[index] = (result as updateService<ArtistBD>).data;
     return res.status(result.code).json(result);
 }
 
-export function getDeleteArtistController(req: Request, res: Response): Response {
-      const result: deleteService | errorService = deleteArtist(req.params.id as string);
-    
-      if (!result.success) {
+export async function getDeleteArtistController(req: Request, res: Response): Promise<Response> {
+    const result: deleteService | errorService = await deleteArtist(req.params.id as string);
+
+    if (!result.success) {
         const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
-      }
-    
-      const index: number = (result as deleteService).index;
-    
-      artists.splice(index, 1);
-    
-      return res.status(result.code).json(result);
+    }
+
+    return res.status(result.code).json(result);
 }

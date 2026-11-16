@@ -14,7 +14,7 @@ import { createSuccessService } from "../interfaces/error/CreateSuccess.Service"
 export async function getAllArtist(): Promise<ArtistBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = `Select * from Artist`;
+    const queryText: string = `SELECT * FROM Artist`;
     const result: IResult<ArtistBD> = await request.query(queryText);
     return result.recordset;
 }
