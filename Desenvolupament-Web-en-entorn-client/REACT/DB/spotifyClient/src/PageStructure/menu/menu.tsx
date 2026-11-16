@@ -2,7 +2,11 @@ import { Link } from "react-router"
 
 const Menu = () => {
     return (
-        <Link to="/Play"> Repeoduir </Link>
+        <nav>
+            <Link to="/Play"> Repeoduir </Link>
+            <Link to="/SongManagment"> Gestió Cançons</Link>
+        </nav>
+
     )
 }
 export default Menu;
