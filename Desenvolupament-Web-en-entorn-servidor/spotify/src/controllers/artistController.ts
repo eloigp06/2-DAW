@@ -53,4 +53,5 @@ export async function getDeleteArtistController(req: Request, res: Response): Pr
     }
 
     return res.status(result.code).json(result);
+    
 }
