@@ -44,7 +44,7 @@ const SongManagment = () => {
             </main>
             {
                 newSong ?
-                <AddSongFrom />
+                <AddSongFrom refreshSong={carregarDadesTrack}/>
                 : <></>
             }
         </>
