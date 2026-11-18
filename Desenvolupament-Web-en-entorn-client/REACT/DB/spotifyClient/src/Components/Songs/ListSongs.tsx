@@ -10,10 +10,14 @@ const ListSongs = (props: SongListProps) => {
                 props.tracks.map(
                     (t: GetTrack) => {
                         return <SongRow
+                            id={t.id}
                             key={t.id}
                             title={t.title}
                             artist={t.artist}
-                            duration={t.duration} />
+                            artist_id={t.artist_id}
+                            duration={t.duration}
+                            edit={props.edit}
+                        />
                     }
                 )
             }

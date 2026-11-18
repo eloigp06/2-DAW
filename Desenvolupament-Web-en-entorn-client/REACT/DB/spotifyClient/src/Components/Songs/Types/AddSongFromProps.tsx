@@ -1,4 +1,8 @@
+import type { TrackCreate } from "../../../ApiManagments/Tracks/Interfaces/TrackCreate";
+import type { Track } from "../../../Model/Track";
+
 export interface AddSongFromProps {
-    refreshSong:() => void;
+    submit: (t: TrackCreate) => void;
+    song?: Track;
     
 }
