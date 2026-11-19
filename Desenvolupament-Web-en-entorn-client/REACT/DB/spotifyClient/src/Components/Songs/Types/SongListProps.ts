@@ -3,6 +3,6 @@ import type { Track } from "../../../Model/Track";
 
 export interface SongListProps {
     tracks: GetTrack[]
-    edit: (t: Track) => void;
+    edit?: (t: Track) => void;
 
 }
