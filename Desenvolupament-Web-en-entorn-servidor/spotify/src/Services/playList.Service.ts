@@ -51,25 +51,28 @@ export async function createPlayList(playList: PlayList): Promise<successService
 }
 
 export async function updatePlayList(playList: PlayList, idPlayList: string): Promise<updateService<PlayListBD> | errorService> {
-    const pool: ConnectionPool = await getConnection();
-    const request: sql.Request = pool.request();
-    const index: number = playLists.findIndex((playList: PlayListBD) => playList.id === idPlayList);
-
-    if (index === -1) {
-        return { success: false, code: 404, message: "PlayList not found" };
-    }
 
     if (!isValidPlayList(playList)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
-    const updatePlayList: PlayListBD = {
-        id: idPlayList,
-        title: playList.title.trim().replace(/\s+/g, " "),
-        user: playList.user.trim().replace(/\s+/g, " "),
-    };
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    return { success: true, code: 200, index: index, data: updatePlayList }
+    const queryText: string = `
+        UPDATE Playlist
+        SET title = @title, user_id = @user
+        WHERE id = @id`;
+
+    request.input("id", sql.UniqueIdentifier, idPlayList);
+    request.input("title", sql.NVarChar(200), playList.title.trim().replace(/\s+/g, " "));
+    request.input("user", sql.UniqueIdentifier, playList.user);
+    const result: IResult<number> = await request.query(queryText);
+    if (result.rowsAffected[0] === 0) {
+        return { success: false, code: 404, message: "Track not found" }
+    }
+
+    return { success: true, code: 200, data: result.rowsAffected[0] };
 }
 
 export async function deletePlayList(idPlayList: string): Promise<deleteService | errorService> {
