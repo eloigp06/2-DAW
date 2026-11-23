@@ -33,30 +33,27 @@ export async function getPostPLayListController(req: Request, res: Response): Pr
     return res.status(result.code).json(result);
 }
 
-export function getPutPlayListController(req: Request, res: Response): Response {
-    const result: updateService<PlayListBD> | errorService = updatePlayList(req.body, req.params.id as string);
+
+
+export async function getPutPlayListController(req: Request, res: Response): Promise<Response> {
+    const result: updateService<number> | errorService =  await updatePlayList(req.body, req.params.id as string);
 
     if (!result.success) {
         const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as updateService<PlayListBD>).index;
-    playLists[index] = (result as updateService<PlayListBD>).data;
     return res.status(result.code).json(result);
+
 }
 
-export function getDeletePlayListController(req: Request, res: Response): Response {
-    const result: deleteService | errorService = deletePlayList(req.params.id as string);
+export async function getDeletePlayListController(req: Request, res: Response): Promise<Response> {
+    const result: deleteService | errorService = await deletePlayList(req.params.id as string);
 
     if (!result.success) {
         const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
     }
-
-    const index: number = (result as deleteService).index;
-
-    playLists.splice(index, 1);
 
     return res.status(result.code).json(result);
 }
