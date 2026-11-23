@@ -79,12 +79,11 @@ export async function deletePlayList(idPlayList: string): Promise<deleteService 
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const index: number = playLists.findIndex((playList: PlayListBD) => playList.id === idPlayList);
-
-    if (index === -1) {
-        return { success: false, code: 404, message: " PlayList not found " }
+    const queryText: string = `DELETE FROM Playlist WHERE id = @id`;
+    request.input("id", sql.UniqueIdentifier, idPlayList);
+    const result: IResult<number> = await request.query(queryText);
+    if (result.rowsAffected[0] === 0) {
+        return { success: false, code: 404, message: "PlayList not found" };
     }
-
-    return { success: true, code: 404, index: index }
-
+    return { success: true, code: 200 };
 }
