@@ -33,3 +33,55 @@ export async function getPlayListById(idPlayList: string): Promise<successServic
     return { success: true, code: 200, data: result.recordset[0] };
 }
 
+export async function createPlayList(playList: PlayList): Promise<successService<PlayListBD> | errorService> {
+
+    if (!isValidPlayList(playList)) {
+        return { success: false, code: 400, message: "Invalid data" };
+    }
+
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `INSERT INTO Playlist(title, user_id)
+        VALUES(@title, @user)`;
+
+    request.input("title", sql.NVarChar(200), playList.title.trim().replace(/\s+/g, " "));
+    request.input("user", sql.UniqueIdentifier, playList.user);
+    const result: IResult<PlayListBD> = await request.query(queryText);
+    return { success: true, code: 201, data: result.recordset[0] };
+}
+
+export async function updatePlayList(playList: PlayList, idPlayList: string): Promise<updateService<PlayListBD> | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const index: number = playLists.findIndex((playList: PlayListBD) => playList.id === idPlayList);
+
+    if (index === -1) {
+        return { success: false, code: 404, message: "PlayList not found" };
+    }
+
+    if (!isValidPlayList(playList)) {
+        return { success: false, code: 400, message: "Invalid data" };
+    }
+
+    const updatePlayList: PlayListBD = {
+        id: idPlayList,
+        title: playList.title.trim().replace(/\s+/g, " "),
+        user: playList.user.trim().replace(/\s+/g, " "),
+    };
+
+    return { success: true, code: 200, index: index, data: updatePlayList }
+}
+
+export async function deletePlayList(idPlayList: string): Promise<deleteService | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const index: number = playLists.findIndex((playList: PlayListBD) => playList.id === idPlayList);
+
+    if (index === -1) {
+        return { success: false, code: 404, message: " PlayList not found " }
+    }
+
+    return { success: true, code: 404, index: index }
+
+}
