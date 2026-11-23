@@ -6,6 +6,7 @@ import { deleteService } from "../interfaces/error/delete.Service";
 import { createPlayList, deletePlayList, getAllPlayList, getPlayListById, updatePlayList } from "../Services/playList.Service";
 import { PlayListBD } from "../interfaces/PlayList/playListBD";
 import { playLists } from "../data/playList/playList";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
 
 export async function getAllPlayListsController(_req: Request, res: Response): Promise<Response> {
@@ -21,14 +22,14 @@ export async function getPlayListByIdController(req: Request, res: Response): Pr
     return res.status(result.code).json(result);
 }
 
-export function getPostPLayListController(req: Request, res: Response): Response {
-    const result: successService<PlayListBD> | errorService = createPlayList(req.body);
+export async function getPostPLayListController(req: Request, res: Response): Promise<Response> {
+    const result: successService<PlayListBD> | errorService = await createPlayList(req.body);
+
 
     if (!result.success) {
         const errorResult = result as errorService;
-        return res.status(result.code).json({ message: errorResult.message })
+        return res.status(result.code).json({ message: errorResult.message });
     }
-    playLists.push((result as successService<PlayListBD>).data);
     return res.status(result.code).json(result);
 }
 
