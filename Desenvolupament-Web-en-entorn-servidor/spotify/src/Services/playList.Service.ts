@@ -3,64 +3,33 @@ import { errorService } from "../interfaces/error/errorSrvice";
 import { successService } from "../interfaces/error/success.Service";
 import { updateService } from "../interfaces/error/update.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/SelectSuccess.Service";
 import { PlayListBD } from "../interfaces/PlayList/playListBD";
 import { playLists } from "../data/playList/playList";
 import { PlayList } from "../interfaces/PlayList/playList";
 import { isValidPlayList } from "../validators/playList.validator";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
+import { getConnection } from "../config/database";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
-export function getAllPlayList(): PlayListBD[] {
-    return playLists
+export async function getAllPlayList(): Promise<PlayListBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `SELECT * FROM PlayList`;
+    const result: IResult<PlayListBD> = await request.query(queryText);
+    return result.recordset;
+
 }
-export function getPlayListById(idPlayList: string): PlayListBD | undefined {
-
-    return playLists.find((p: PlayListBD) => { return p.id === idPlayList });
-}
-
-export function createPlayList(playList: PlayList): successService<PlayList> | errorService {
-
-    if (!isValidPlayList(playList)) {
-        return { success: false, code: 400, message: "Invalid data" };
+export async function getPlayListById(idPlayList: string): Promise<successService<PlayListBD> | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `Select * from PlayList 
+        Where PlayList.id = @id`;
+    request.input("id", sql.UniqueIdentifier, idPlayList);
+    const result: IResult<PlayListBD> = await request.query(queryText);
+    if (result.recordset.length === 0) {
+        return { success: false, code: 404, message: "Album not found" };
     }
-
-    const uuid: string = randomUUID();
-
-    const playListRecord: PlayListBD = {
-        id: uuid,
-        title: playList.title.trim().replace(/\s+/g, " "),
-        user: playList.user.trim().replace(/\s+/g, " "),
-    };
-
-    return { success: true, code: 201, data: playListRecord };
+    return { success: true, code: 200, data: result.recordset[0] };
 }
 
-export function updatePlayList(playList: PlayList, idPlayList: string): updateService<PlayListBD> | errorService {
-    const index: number = playLists.findIndex((playList: PlayListBD) => playList.id === idPlayList);
-
-    if (index === -1) {
-        return { success: false, code: 404, message: "PlayList not found" };
-    }
-
-    if (!isValidPlayList(playList)) {
-        return { success: false, code: 400, message: "Invalid data" };
-    }
-
-    const updatePlayList: PlayListBD = {
-        id: idPlayList,
-        title: playList.title.trim().replace(/\s+/g, " "),
-        user: playList.user.trim().replace(/\s+/g, " "),
-    };
-
-    return { success: true, code: 200, index: index, data: updatePlayList }
-}
-
-export function deletePlayList(idPlayList: string): deleteService | errorService {
-  const index: number = playLists.findIndex((playList: PlayListBD) => playList.id === idPlayList);
-
-  if (index === -1) {
-    return { success: false, code: 404, message: " PlayList not found " }
-  }
-
-      return { success: true, code: 404, index: index }
-
-}
