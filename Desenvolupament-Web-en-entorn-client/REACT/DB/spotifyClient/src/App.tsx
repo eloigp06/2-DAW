@@ -4,6 +4,7 @@ import HeaderCard from './Components/Header/HeaderCard'
 import Play from './Pages/Authenticated/Play'
 import Menu from './PageStructure/menu/menu'
 import SongManagment from './Pages/Admin/SongManagment'
+import Public from './Pages/Public/Public'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       />
       <Menu />
       <Routes>
+        <Route path="/Public" element={<Public />}></Route>
         <Route path="/Play" element={<Play />}></Route>
         <Route path="/SongManagment" element={<SongManagment/>} ></Route>
       </Routes>
