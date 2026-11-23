@@ -8,16 +8,17 @@ import { PlayListBD } from "../interfaces/PlayList/playListBD";
 import { playLists } from "../data/playList/playList";
 
 
-export function getAllPlayListsController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllPlayList())
+export async function getAllPlayListsController(_req: Request, res: Response): Promise<Response> {
+    const playLists: PlayListBD[] = await getAllPlayList()
+    return res.status(200).json(playLists)
 }
 
-export function getPlayListByIdController(req: Request, res: Response): Response {
-    const findsPlayList: PlayListBD | undefined = getPlayListById(req.params.id as string);
-    if (!findsPlayList) {
-        return res.status(404).json({ message: "PlayList not found" })
+export async function getPlayListByIdController(req: Request, res: Response): Promise<Response> {
+    const result: successService<PlayListBD> | errorService = await getPlayListById(req.params.id as string);
+    if (!result.success) {
+        return res.status(result.code).json({ message: (result as errorService).message })
     }
-    return res.status(200).json(findsPlayList);
+    return res.status(result.code).json(result);
 }
 
 export function getPostPLayListController(req: Request, res: Response): Response {
@@ -45,16 +46,16 @@ export function getPutPlayListController(req: Request, res: Response): Response 
 }
 
 export function getDeletePlayListController(req: Request, res: Response): Response {
-      const result: deleteService | errorService = deletePlayList(req.params.id as string);
-    
-      if (!result.success) {
+    const result: deleteService | errorService = deletePlayList(req.params.id as string);
+
+    if (!result.success) {
         const errorResult = result as errorService;
         return res.status(result.code).json({ message: errorResult.message })
-      }
-    
-      const index: number = (result as deleteService).index;
-    
-      playLists.splice(index, 1);
-    
-      return res.status(result.code).json(result);
+    }
+
+    const index: number = (result as deleteService).index;
+
+    playLists.splice(index, 1);
+
+    return res.status(result.code).json(result);
 }
