@@ -1,235 +1,116 @@
+/* Layout */
+main {
+  display: flex;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.track-tables,
+main > aside {
+  flex: 1;
+}
+
+/* Header i menú */
 .header-component {
   display: flex;
   justify-content: flex-end;
-  gap: 1.5rem;
-  width: min(1120px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: 1rem 0 0.5rem;
-  color: #b3b3b3;
+  gap: 20px;
+  max-width: 1100px;
+  margin: auto;
+  padding: 10px 20px;
 }
 
 .header-component h4 {
   margin: 0;
-  font-size: 0.85rem;
-  font-weight: 500;
 }
 
 nav {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  width: min(1120px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: 0.5rem;
-  border: 1px solid #282828;
-  border-radius: 0.75rem;
-  background: #181818;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 10px auto;
 }
 
 nav a {
-  padding: 0.65rem 1rem;
-  border-radius: 0.5rem;
-  color: #d7d7d7;
-  font-weight: 600;
+  padding: 10px;
+  color: white;
   text-decoration: none;
-  transition: background-color 160ms ease, color 160ms ease;
 }
 
-nav a:hover,
-nav a:focus-visible {
-  background: #282828;
-  color: #1ed760;
+/* Targetes */
+.app-header,
+.song-card,
+.play-card,
+#playlist,
+table {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  background: #181818;
 }
 
-main {
+/* Contingut */
+h1,
+h2,
+h3,
+p,
+td,
+span {
+  color: #ddd;
+}
+
+.controls {
   display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  width: min(1120px, calc(100% - 2rem));
-  margin: 1.5rem auto;
+  gap: 10px;
 }
 
-.track-tables,
-main > aside {
-  min-width: 0;
-  flex: 1 1 0;
+#playlist ul {
+  padding: 0;
+  list-style: none;
 }
 
-.track-tables {
-  overflow-x: auto;
-}
-
-.track-tables > p {
-  padding: 1.25rem;
-  border: 1px solid #282828;
-  border-radius: 0.75rem;
-  color: #b3b3b3;
+#playlist li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 10px;
+  background: #222;
 }
 
 table {
   width: 100%;
-  border: 1px solid #282828;
   border-spacing: 0;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  background: #181818;
-  text-align: left;
-}
-
-.track-tables > table + table {
-  margin-top: 1rem;
 }
 
 td {
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid #282828;
-  color: #d7d7d7;
-}
-
-tr:last-child td {
-  border-bottom: 0;
-}
-
-tr:hover td {
-  background: #222;
-}
-
-main > aside {
-  display: grid;
-  gap: 1rem;
-}
-
-.app-header,
-.song-card,
-.play-card {
-  padding: 1.25rem;
-  border: 1px solid #282828;
-  border-radius: 0.875rem;
-  background: #181818;
-}
-
-.app-header h1 {
-  margin: 0 0 0.75rem;
-  color: #1ed760;
-  font-size: 1.5rem;
-}
-
-.app-header .info p,
-.song-card p {
-  margin: 0.45rem 0;
-  color: #b3b3b3;
-}
-
-.app-header .controls,
-.play-card .controls {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  margin-top: 1rem;
-}
-
-.song-card h1 {
-  margin: 0 0 0.75rem;
-  font-size: 1.35rem;
-  overflow-wrap: anywhere;
-}
-
-.song-card img {
-  width: 2.75rem;
-  height: 2.75rem;
-  object-fit: contain;
-  cursor: pointer;
-}
-
-.song-card > div {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.song-card > div p {
-  margin: 0;
-}
-
-.play-card .controls {
-  margin-top: 0;
-}
-
-.play-card span {
-  color: #d7d7d7;
-}
-
-.play-card p {
-  color: #b3b3b3;
-}
-
-.track-tables > button {
-  margin-top: 1rem;
+  padding: 10px;
+  border-bottom: 1px solid #333;
 }
 
 button {
-  padding: 0.65rem 1rem;
+  padding: 8px 12px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 20px;
   background: #1ed760;
-  color: #101010;
-  font: inherit;
-  font-weight: 700;
   cursor: pointer;
-  transition: background-color 160ms ease, transform 160ms ease;
-}
-
-button:hover:not(:disabled) {
-  transform: scale(1.03);
-  background: #3be477;
-}
-
-button:focus-visible,
-.song-card img:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
 }
 
 button:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
 }
 
-@media (max-width: 760px) {
+.song-card img {
+  width: 40px;
+  cursor: pointer;
+}
+
+/* Mòbil */
+@media (max-width: 700px) {
   main {
     flex-direction: column;
-  }
-
-  .track-tables,
-  main > aside {
-    width: 100%;
-    flex: auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-component {
-    justify-content: space-between;
-    gap: 0.75rem;
-  }
-
-  nav {
-    justify-content: stretch;
-  }
-
-  nav a {
-    flex: 1;
-    padding: 0.65rem 0.4rem;
-    text-align: center;
-  }
-
-  main {
-    width: calc(100% - 1.25rem);
-    margin-top: 1rem;
-  }
-
-  td {
-    padding: 0.7rem;
   }
 }
