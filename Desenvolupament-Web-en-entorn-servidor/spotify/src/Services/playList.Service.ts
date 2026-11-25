@@ -8,6 +8,7 @@ import { isValidPlayList } from "../validators/playList.validator";
 import { ConnectionPool, IResult } from "mssql";
 import sql from "mssql";
 import { getConnection } from "../config/database";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
 export async function getAllPlayList(): Promise<PlayListBD[]> {
     const pool: ConnectionPool = await getConnection();
@@ -30,7 +31,7 @@ export async function getPlayListById(idPlayList: string): Promise<successServic
     return { success: true, code: 200, data: result.recordset[0] };
 }
 
-export async function createPlayList(playList: PlayList): Promise<successService<PlayListBD> | errorService> {
+export async function createPlayList(playList: PlayList): Promise<createSuccessService | errorService> {
 
     if (!isValidPlayList(playList)) {
         return { success: false, code: 400, message: "Invalid data" };
@@ -39,12 +40,12 @@ export async function createPlayList(playList: PlayList): Promise<successService
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
     const queryText: string = `INSERT INTO Playlist(title, user_id)
-        VALUES(@title, @user)`;
+        VALUES(@title, @user_id)`;
 
-    request.input("title", sql.NVarChar(200), playList.title.trim().replace(/\s+/g, " "));
-    request.input("user", sql.UniqueIdentifier, playList.user);
+    request.input("title", sql.NVarChar, playList.title.trim().replace(/\s+/g, " "));
+    request.input("user_id", sql.UniqueIdentifier, playList.user);
     const result: IResult<PlayListBD> = await request.query(queryText);
-    return { success: true, code: 201, data: result.recordset[0] };
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
 export async function updatePlayList(playList: PlayList, idPlayList: string): Promise<updateService<PlayListBD> | errorService> {
@@ -58,7 +59,7 @@ export async function updatePlayList(playList: PlayList, idPlayList: string): Pr
 
     const queryText: string = `
         UPDATE Playlist
-        SET title = @title, user_id = @user
+        SET title = @title, user_id = @user_id
         WHERE id = @id`;
 
     request.input("id", sql.UniqueIdentifier, idPlayList);
@@ -76,7 +77,7 @@ export async function deletePlayList(idPlayList: string): Promise<deleteService 
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = `DELETE FROM Playlist WHERE id = @id`;
+    const queryText: string = `DELETE * FROM Playlist WHERE id = @id`;
     request.input("id", sql.UniqueIdentifier, idPlayList);
     const result: IResult<number> = await request.query(queryText);
     if (result.rowsAffected[0] === 0) {

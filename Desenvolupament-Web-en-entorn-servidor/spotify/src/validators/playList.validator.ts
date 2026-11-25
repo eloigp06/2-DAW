@@ -7,7 +7,7 @@ export function isValidPlayList(playList: PlayList): boolean | string | undefine
     if (!playList) {
         return false;
     }
-    if (!playList.id || !playList.title || !playList.user ) {
+    if (!playList.title || !playList.user ) {
         return false
     }
 
