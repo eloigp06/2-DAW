@@ -5,9 +5,10 @@ import { errorService } from "../interfaces/error/errorSrvice";
 import { createPlayListTrack, deletePlayListTrack, getAllPlayListTracks, getPlayListTrackById, getTracksByPlayListId } from "../Services/PlayListTracks.Service";
 import { successService } from "../interfaces/error/success.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
-import { SelectSuccessService } from "../interfaces/error/Selectsuccess.Service";
-export function getAllPlayListTracksController(_req: Request, res: Response): Response {
-  return res.status(200).json(getAllPlayListTracks());
+
+export async function getAllPlayListTracksController(_req: Request, res: Response): Promise<Response> {
+  const playListTracks: PlayListTracksBD[] = await getAllPlayListTracks();
+  return res.status(200).json(playListTracks);
 }
 
 export function getPlayListTrackByIdController(req: Request, res: Response): Response {

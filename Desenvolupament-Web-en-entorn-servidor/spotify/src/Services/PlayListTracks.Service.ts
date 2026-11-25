@@ -1,14 +1,20 @@
-import { randomUUID } from "crypto";
-import { playListTracks } from "../data/playListTracks/playListTracks";
 import { PlayListTracks } from "../interfaces/PlayListTracks/playListTracks";
 import { PlayListTracksBD } from "../interfaces/PlayListTracks/playListTracksBD";
 import { errorService } from "../interfaces/error/errorSrvice";
 import { successService } from "../interfaces/error/success.Service";
 import { deleteService } from "../interfaces/error/delete.Service";
 import { isValidPlayListTrack } from "../validators/playListTracks.validator";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
+import { getConnection } from "../config/database";
+import { createSuccessService } from "../interfaces/error/CreateSuccess.Service";
 
-export function getAllPlayListTracks(): PlayListTracksBD[] {
-    return playListTracks;
+export async function getAllPlayListTracks(): Promise<PlayListTracksBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `SELECT * FROM playListTracks`;
+    const result: IResult<PlayListTracksBD> = await request.query(queryText);
+    return result.recordset;
 }
 
 export function getPlayListTrackById(id: string): PlayListTracksBD | undefined {
