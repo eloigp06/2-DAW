@@ -25,7 +25,7 @@ export async function getPlayListById(idPlayList: string): Promise<successServic
     request.input("id", sql.UniqueIdentifier, idPlayList);
     const result: IResult<PlayListBD> = await request.query(queryText);
     if (result.recordset.length === 0) {
-        return { success: false, code: 404, message: "Album not found" };
+        return { success: false, code: 404, message: "PlayList not found" };
     }
     return { success: true, code: 200, data: result.recordset[0] };
 }
