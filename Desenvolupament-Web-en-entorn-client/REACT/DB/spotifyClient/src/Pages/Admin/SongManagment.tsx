@@ -45,7 +45,7 @@ const SongManagment = () => {
     }
 
     async function update(t: TrackCreate) {
-        const id= newSong.mode==="edit"?newSong.song.id:"";
+        const id = newSong.mode === "edit" ? newSong.song.id : "";
         await PutTrack(t, id);
         await carregarDadesTrack();
         setNewSong({ mode: "none" });
@@ -72,8 +72,8 @@ const SongManagment = () => {
                 newSong.mode === "new" ?
                     <AddSongFrom submit={(t) => save(t)} />
                     : newSong.mode === "edit" ?
-                        <AddSongFrom submit={(t) => update(t)} song={ newSong.song} />
-                        : <button onClick={addSong}>Nova</button>
+                        <AddSongFrom submit={(t) => update(t)} song={newSong.song} />
+                        : <button onClick={addSong}>Nova canço</button>                        
             }
         </>
     )

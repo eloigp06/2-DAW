@@ -8,7 +8,7 @@ import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
 import { users } from "../../Data/user";
 import type { GetPlayList } from "../../ApiManagments/PlayLists/interface/PlayList";
-import type { GetPlayListsTracks } from "../../ApiManagments/PlayLists copy/interface/PlayListsTracks";
+import type { GetPlayListsTracks } from "../../ApiManagments/PlayListsTrack/interface/PlayListsTracks";
 import PlayListCard from "../../Components/PlayListReproductor/PlayListCard";
 
 const Play = () => {

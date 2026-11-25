@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PlayListCardProps } from "./Types/PlayListCardProps";
-import type { GetPlayListsTracks } from "../../ApiManagments/PlayLists copy/interface/PlayListsTracks";
+import type { GetPlayListsTracks } from "../../ApiManagments/PlayListsTrack/interface/PlayListsTracks";
 import type { GetTrack } from "../../ApiManagments/Tracks/Interfaces/Track";
 
 const PlayListCard = ({ playList, playListTracks, tracks, onPlay }: PlayListCardProps) => {
