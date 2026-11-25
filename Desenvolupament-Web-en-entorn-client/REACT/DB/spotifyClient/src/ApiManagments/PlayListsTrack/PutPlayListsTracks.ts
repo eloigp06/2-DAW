@@ -1,6 +1,6 @@
 import type { GetPlayListsTracks } from "./interface/PlayListsTracks";
 
-export async function PlayListTrack(newPlayListTrack: GetPlayListsTracks, id: string) {
+export async function PutPlayListTrack(newPlayListTrack: GetPlayListsTracks, id: string) {
     const response: Response = await fetch(
         `http://localhost:3000/playListTracks/${id}`,
         {
