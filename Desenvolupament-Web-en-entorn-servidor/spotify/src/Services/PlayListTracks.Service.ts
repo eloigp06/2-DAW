@@ -12,14 +12,22 @@ import { createSuccessService } from "../interfaces/error/CreateSuccess.Service"
 export async function getAllPlayListTracks(): Promise<PlayListTracksBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = `SELECT * FROM playListTracks`;
+    const queryText: string = `SELECT * FROM PlayListTracks`;
     const result: IResult<PlayListTracksBD> = await request.query(queryText);
     return result.recordset;
 }
 
-export function getPlayListTrackById(id: string): PlayListTracksBD | undefined {
-    return playListTracks.find((plt: PlayListTracksBD) => plt.id === id);
-}
+export async function getPlayListTrackById(id: string): Promise<successService<PlayListTracksBD> | errorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = `SELECT * FROM PlayListTracks WHERE id = @id`;
+
+    request.input("id", sql.UniqueIdentifier, id);
+    const result: IResult<PlayListTracksBD> = await request.query(queryText);
+    if (result.recordset.length === 0) {
+        return { success: false, code: 404, message: "PlayList not found" };
+    }
+    return { success: true, code: 200, data: result.recordset[0] };}
 
 export function getTracksByPlayListId(playListId: string): PlayListTracksBD[] {
     return playListTracks.filter((plt: PlayListTracksBD) => plt.playList === playListId);

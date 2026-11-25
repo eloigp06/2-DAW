@@ -11,8 +11,8 @@ export async function getAllPlayListTracksController(_req: Request, res: Respons
   return res.status(200).json(playListTracks);
 }
 
-export function getPlayListTrackByIdController(req: Request, res: Response): Response {
-  const relation: PlayListTracksBD | undefined = getPlayListTrackById(req.params.id as string);
+export async function getPlayListTrackByIdController(req: Request, res: Response): Promise<Response> {
+  const relation: successService<PlayListTracksBD> | errorService = await getPlayListTrackById(req.params.id as string);
   if (!relation) {
     return res.status(404).json({ message: "PlayList track relation not found" });
   }
