@@ -9,10 +9,10 @@ import type { TrackView } from "../../Components/Songs/Types/TrackView";
 
 const PlayListPage = () => {
   const [tracks, setTracks] = useState<GetTrack[]>([]);
-    const [, setIsPlaying] = useState<string | null>(null);
+    const [playingTitle, setIsPlaying] = useState<string | null>(null);
     const [playlistTracks, setPlaylistTracks] = useState<GetPlayListsTracks[]>([]);
     const [playlists, setPlaylist] = useState<GetPlayList[]>([]);
-    const [, setTrack] = useState<TrackView>(() =>
+    const [track, setTrack] = useState<TrackView>(() =>
     ({
         ...tracks[Math.floor(Math.random() * tracks.length)],
         "reproduccions": Math.floor(Math.random() * 1000),
@@ -27,19 +27,7 @@ const PlayListPage = () => {
         const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
         const listTrack: GetTrack[] = await resposta.json() as GetTrack[];
         setTracks(listTrack);
-        if (listTrack.length > 0) {
-            const initalTrack = listTrack[Math.floor(Math.random() * listTrack.length)];
-            if (initalTrack) {
-                setTrack({
-                    ...initalTrack,
-                    reproduccions: Math.floor(Math.random() * 1000),
-                    likes: {
-                        like: false,
-                        totalLikes: 0,
-                    },
-                });
-            }
-        }
+
     }
 
     async function carregarDadesPlayList() {
@@ -88,6 +76,12 @@ const PlayListPage = () => {
                             setIsPlaying(song.title);
                         }}
                     />
+                    {playingTitle !== null && (
+                        <div>
+                            <p>Reproduint: {track.title}</p>
+                            <button type="button" onClick={() => setIsPlaying(null)}>Stop</button>
+                        </div>
+                    )}
                 </div>
             </main>
         </>
