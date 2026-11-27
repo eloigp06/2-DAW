@@ -9,6 +9,7 @@ import { ENV } from "../../Config/env";
 import type { GetPlayList } from "../../ApiManagments/PlayLists/interface/PlayList";
 import type { GetPlayListsTracks } from "../../ApiManagments/PlayListsTrack/interface/PlayListsTracks";
 import PlayListCard from "../../Components/PlayListReproductor/PlayListCard";
+import { Link } from "react-router";
 
 const Play = () => {
 
@@ -212,7 +213,12 @@ const Play = () => {
 
                     <header className="app-header">
                         <h1>SPOTIFY</h1>
-
+                        <button>
+                            <Link to="/PlayListsPage"> PlayList </Link>
+                        </button>
+                        <button>
+                            <Link to="/HisyotyPage"> Historial </Link>
+                        </button>
                         <div className="controls">
                             <button type="button" onClick={handleClickRandom}>
                                 Random

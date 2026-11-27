@@ -5,6 +5,8 @@ import Play from './Pages/Authenticated/Play'
 import Menu from './PageStructure/menu/menu'
 import SongManagment from './Pages/Admin/SongManagment'
 import Public from './Pages/Public/Public'
+import HisyotyPage from './Pages/Authenticated/HisyotyPage'
+import PlayListsPage from './Pages/Authenticated/PlayListsPage'
 
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
       <Routes>
         <Route path="/Public" element={<Public />}></Route>
         <Route path="/Play" element={<Play />}></Route>
+        <Route path="/PlayListsPage" element={<PlayListsPage />}></Route>
+        <Route path="/HisyotyPage" element={<HisyotyPage />}></Route>
         <Route path="/SongManagment" element={<SongManagment/>} ></Route>
       </Routes>
     </BrowserRouter>
