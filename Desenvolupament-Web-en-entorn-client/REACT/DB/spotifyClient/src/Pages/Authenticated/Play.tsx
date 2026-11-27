@@ -15,7 +15,6 @@ const Play = () => {
     const [volume, setVolume] = useState<number>(10);
     const [escolta] = useState(false);
     const [playingTitle, setIsPlaying] = useState<string | null>(null);
-    const [history, setHistory] = useState<{ title: string; date: string }[]>([]);
     const [track, setTrack] = useState<TrackView>(() =>
     ({
         ...tracks[Math.floor(Math.random() * tracks.length)],
@@ -69,7 +68,7 @@ const Play = () => {
             track: tracks[1].id
         }
         const response: Response = await fetch(
-            'http://localhost:3000/tracks/user/history',
+            `${ENV.API_BASE_URL}/tracks/user/history`,
             {
                 method: "POST",
                 headers: {
@@ -140,10 +139,6 @@ const Play = () => {
         if (!track.id) {
             return;
         }
-        setHistory((prevHistory) => [
-            ...prevHistory,
-            { title: track.title, date: new Date().toLocaleString('ca-ES') },
-        ])
         incrementReproduction();
         setIsPlaying(track.title);
     }
@@ -178,18 +173,6 @@ const Play = () => {
                             </table>
                             : <p>No tracks avalible</p>
                     }
-
-
-                    <table>
-                        <tbody>
-                            {history.map((entry, index) => (
-                                <tr key={`${entry.date}-${index}`}>
-                                    <td>{entry.title}</td>
-                                    <td>{entry.date}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
                 </div>
 
                 <aside>
