@@ -19,7 +19,7 @@ const PlayCard = (props: PlayCardProps) => {
                 <button onClick={VolumenUp} disabled={props.volume === 100}>+</button>
             </div>
             
-            <p>{props.escolta ?? 'No song is playing'}</p>
+            <p>{props.playingTitle ?? 'No song is playing'}</p>
             {props.playingTitle !== null && (
                 <button type="button" onClick={props.stop}>Stop</button>
             )}
