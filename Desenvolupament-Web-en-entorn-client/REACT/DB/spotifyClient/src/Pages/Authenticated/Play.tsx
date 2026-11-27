@@ -6,7 +6,6 @@ import SongCard from "../../Components/Songs/SongCard";
 import type { Like } from "../../Components/Songs/Types/Like";
 import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
-import { users } from "../../Data/user";
 import type { GetPlayList } from "../../ApiManagments/PlayLists/interface/PlayList";
 import type { GetPlayListsTracks } from "../../ApiManagments/PlayListsTrack/interface/PlayListsTracks";
 import PlayListCard from "../../Components/PlayListReproductor/PlayListCard";
@@ -16,9 +15,6 @@ const Play = () => {
     const [tracks, setTracks] = useState<GetTrack[]>([]);
     const [volume, setVolume] = useState<number>(10);
     const [escolta] = useState(false);
-    const [user] = useState(() => users[Math.floor(Math.random() * users.length)]);
-    const [now, setNow] = useState(() => new Date());
-    const data = now.toLocaleString('ca-ES');
     const [playingTitle, setIsPlaying] = useState<string | null>(null);
     const [playlistTracks, setPlaylistTracks] = useState<GetPlayListsTracks[]>([]);
     const [history, setHistory] = useState<{ title: string; date: string }[]>([]);
@@ -217,15 +213,7 @@ const Play = () => {
                     <header className="app-header">
                         <h1>SPOTIFY</h1>
 
-                        <div className="info">
-                            <p>Usuari: {user.name}</p>
-                            <p>Data: {data}</p>
-                        </div>
-
                         <div className="controls">
-                            <button type="button" onClick={() => setNow(new Date())}>
-                                Actualitza data
-                            </button>
                             <button type="button" onClick={handleClickRandom}>
                                 Random
                             </button>
