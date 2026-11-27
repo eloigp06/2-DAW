@@ -6,10 +6,8 @@ import SongCard from "../../Components/Songs/SongCard";
 import type { Like } from "../../Components/Songs/Types/Like";
 import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
-import type { GetPlayList } from "../../ApiManagments/PlayLists/interface/PlayList";
-import type { GetPlayListsTracks } from "../../ApiManagments/PlayListsTrack/interface/PlayListsTracks";
-import PlayListCard from "../../Components/PlayListReproductor/PlayListCard";
 import { Link } from "react-router";
+import ListSongs from "../../Components/Songs/ListSongs";
 
 const Play = () => {
 
@@ -17,9 +15,7 @@ const Play = () => {
     const [volume, setVolume] = useState<number>(10);
     const [escolta] = useState(false);
     const [playingTitle, setIsPlaying] = useState<string | null>(null);
-    const [playlistTracks, setPlaylistTracks] = useState<GetPlayListsTracks[]>([]);
     const [history, setHistory] = useState<{ title: string; date: string }[]>([]);
-    const [playlists, setPlaylist] = useState<GetPlayList[]>([]);
     const [track, setTrack] = useState<TrackView>(() =>
     ({
         ...tracks[Math.floor(Math.random() * tracks.length)],
@@ -51,23 +47,10 @@ const Play = () => {
         }
     }
 
-    async function carregarDadesPlayList() {
-        const resposta: Response = await fetch(`${ENV.API_BASE_URL}/playLists`);
-        const listPlayList: GetPlayList[] = await resposta.json() as GetPlayList[];
-        setPlaylist(listPlayList);
-    }
-
-    async function carregarDadesPlayListsTracks() {
-        const resposta: Response = await fetch(`${ENV.API_BASE_URL}/playListTracks`);
-        const listPlaylistTracks: GetPlayListsTracks[] = await resposta.json() as GetPlayListsTracks[];
-        setPlaylistTracks(listPlaylistTracks);
-    }
 
     useEffect(
         () => {
             carregarDadesTrack();
-            carregarDadesPlayList();
-            carregarDadesPlayListsTracks();
         }, []
     );
 
@@ -183,19 +166,19 @@ const Play = () => {
         <>
             <main>
                 <div className="track-tables">
-                    <PlayListCard
-                        playList={playlists}
-                        playListTracks={playlistTracks}
-                        tracks={tracks}
-                        onPlay={(song) => {
-                            setTrack({
-                                ...song,
-                                reproduccions: 0,
-                                likes: { like: false, totalLikes: 0 },
-                            });
-                            setIsPlaying(song.title);
-                        }}
-                    />
+                    {
+                        tracks.length > 0 ?
+                            <table>
+                                <thead>
+                                    <title>ListSong</title>
+                                </thead>
+                                <tbody>
+                                    <ListSongs tracks={tracks} />
+                                </tbody>
+                            </table>
+                            : <p>No tracks avalible</p>
+                    }
+
 
                     <table>
                         <tbody>
